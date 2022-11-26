@@ -15,7 +15,7 @@ C:/Users/Radium7/Project
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-60965
+54554
 Successfully changed project path to: C:/Users/Radium7/Project
 C:/Users/Radium7/Project
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -47,7 +47,7 @@ C:/Users/Radium7/Project
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 98.24 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 90.68 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.3.11f1 (0a5ca18544bf)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/Resources/UnitySubsystems
@@ -63,92 +63,93 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56876
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56704
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.3.11f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.005966 seconds.
+Registered in 0.007416 seconds.
 Native extension for WindowsStandalone target not found
 Native extension for WebGL target not found
-Refreshing native plugins compatible for Editor in 114.93 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 77.66 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.862 seconds
+- Completed reload, in  0.648 seconds
 Domain Reload Profiling:
-	ReloadAssembly (863ms)
-		BeginReloadAssembly (133ms)
+	ReloadAssembly (649ms)
+		BeginReloadAssembly (102ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (601ms)
-			LoadAssemblies (132ms)
+		EndReloadAssembly (444ms)
+			LoadAssemblies (100ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (134ms)
+			SetupTypeCache (99ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (48ms)
-			SetupLoadedEditorAssemblies (345ms)
+			RebuildScriptCaches (27ms)
+			SetupLoadedEditorAssemblies (270ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (15ms)
+				InitializePlatformSupportModulesInManaged (8ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (115ms)
-				BeforeProcessingInitializeOnLoad (2ms)
-				ProcessInitializeOnLoadAttributes (160ms)
-				ProcessInitializeOnLoadMethodAttributes (52ms)
+				RefreshPlugins (78ms)
+				BeforeProcessingInitializeOnLoad (1ms)
+				ProcessInitializeOnLoadAttributes (140ms)
+				ProcessInitializeOnLoadMethodAttributes (43ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.013926 seconds.
+Registered in 0.006341 seconds.
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory doesn't match image C:\Users\Radium7\Project\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
 Symbol file LoadedFromMemory doesn't match image C:\Users\Radium7\Project\Library\PackageCache\com.unity.visualscripting@1.7.8\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
 Native extension for WindowsStandalone target not found
 Native extension for WebGL target not found
-Refreshing native plugins compatible for Editor in 0.64 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 0.79 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.193 seconds
+Package Manager log level set to [2]
+- Completed reload, in  1.017 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1194ms)
-		BeginReloadAssembly (152ms)
+	ReloadAssembly (1018ms)
+		BeginReloadAssembly (105ms)
 			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (7ms)
+			DisableScriptedObjects (5ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (36ms)
-		EndReloadAssembly (917ms)
-			LoadAssemblies (148ms)
+			CreateAndSetChildDomain (21ms)
+		EndReloadAssembly (792ms)
+			LoadAssemblies (139ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (277ms)
+			SetupTypeCache (218ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (50ms)
-			SetupLoadedEditorAssemblies (416ms)
+			RebuildScriptCaches (42ms)
+			SetupLoadedEditorAssemblies (362ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (6ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (88ms)
-				ProcessInitializeOnLoadAttributes (281ms)
-				ProcessInitializeOnLoadMethodAttributes (34ms)
+				BeforeProcessingInitializeOnLoad (78ms)
+				ProcessInitializeOnLoadAttributes (242ms)
+				ProcessInitializeOnLoadMethodAttributes (30ms)
 				AfterProcessingInitializeOnLoad (5ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (6ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.07 seconds
-Refreshing native plugins compatible for Editor in 1.66 ms, found 3 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
+Refreshing native plugins compatible for Editor in 2.13 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3380 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 27 unused Assets / (113.4 KB). Loaded Objects now: 3837.
-Memory consumption went from 116.2 MB to 116.1 MB.
-Total: 5.019800 ms (FindLiveObjects: 0.507100 ms CreateObjectMapping: 0.118300 ms MarkObjects: 4.185400 ms  DeleteObjects: 0.207900 ms)
+Unloading 3528 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 29 unused Assets / (88.3 KB). Loaded Objects now: 4008.
+Memory consumption went from 142.5 MB to 142.4 MB.
+Total: 4.151700 ms (FindLiveObjects: 0.581800 ms CreateObjectMapping: 0.121100 ms MarkObjects: 3.327000 ms  DeleteObjects: 0.119700 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
@@ -162,7 +163,35 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 99873.502183 seconds.
-  path: Assets
-  artifactKey: Guid(00000000000000001000000000000000) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets using Guid(00000000000000001000000000000000) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '79842766b460edbeab6a34051e857a80') in 0.017808 seconds 
+  Time since last request: 83713.332579 seconds.
+  path: Assets/Cartoon_Texture_Pack/WOOD/WOOD_Plain/Materials/Wood_Plain_B.mat
+  artifactKey: Guid(ca5f9003d85586d4d96ea25bf9f6bb44) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Cartoon_Texture_Pack/WOOD/WOOD_Plain/Materials/Wood_Plain_B.mat using Guid(ca5f9003d85586d4d96ea25bf9f6bb44) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e2d09e13b8ce086b5603cb537d86140e') in 0.302571 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000063 seconds.
+  path: Assets/Cartoon_Texture_Pack/WOOD/WOOD_Plain/Materials
+  artifactKey: Guid(604918ad4a65d1743983ec55274618f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Cartoon_Texture_Pack/WOOD/WOOD_Plain/Materials using Guid(604918ad4a65d1743983ec55274618f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '696ce37c08d9a79f4265996d281119c6') in 0.011888 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 32.448306 seconds.
+  path: Assets/Cartoon_Texture_Pack/ROOF/ROOF_RoundTile_Bump/Materials/Roof_RoundTile_Bump_C.mat
+  artifactKey: Guid(d54a14fe29b4e104bb3ce3d334eea9bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Cartoon_Texture_Pack/ROOF/ROOF_RoundTile_Bump/Materials/Roof_RoundTile_Bump_C.mat using Guid(d54a14fe29b4e104bb3ce3d334eea9bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd14b5e160df1097c69c842ef2a329e40') in 0.091410 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000044 seconds.
+  path: Assets/Cartoon_Texture_Pack/ROOF/ROOF_RoundTile_Bump/Materials/UnderRoof_RoundTile_Bump_A.mat
+  artifactKey: Guid(6f66498e9b1c3b24eaddc0b5d10c2559) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Cartoon_Texture_Pack/ROOF/ROOF_RoundTile_Bump/Materials/UnderRoof_RoundTile_Bump_A.mat using Guid(6f66498e9b1c3b24eaddc0b5d10c2559) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3bf00751d1f3cecb09484e4f24bedd31') in 0.146205 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000101 seconds.
+  path: Assets/Cartoon_Texture_Pack/ROOF/ROOF_RoundTile_Bump/Materials/UnderRoof_RoundTile_Bump_B.mat
+  artifactKey: Guid(ea88ea14a82c60c419cfa79f7bf0ef00) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Cartoon_Texture_Pack/ROOF/ROOF_RoundTile_Bump/Materials/UnderRoof_RoundTile_Bump_B.mat using Guid(ea88ea14a82c60c419cfa79f7bf0ef00) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '698e89b8a579c2f1586b661ad85d47d2') in 0.091327 seconds 
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0
