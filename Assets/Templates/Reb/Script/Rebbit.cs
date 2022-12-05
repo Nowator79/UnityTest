@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,26 +13,43 @@ public class Rebbit : MainUnitController
     private float SpeedRotate = 2;
     [SerializeField]
     private float Speed = 2;
-
-    protected override void Start()
+    private bool IsInit = false;
+    public override void Init()
     {
-        base.Start();
         _rigidbody = GetComponent<Rigidbody>();
-        InvokeRepeating(nameof(MoveJump), _timeStart, 2);
+
+        if (Scripts.NetWorkMB.IsClient)
+        {
+            base.Start();
+            InvokeRepeating(nameof(MoveJump), _timeStart, 2);
+        }
+        else
+        {
+            _rigidbody.useGravity = false;
+        }
+
+        IsInit = true;
     }
     private void Update()
     {
-        if(_positionTarget.x > 0 || _positionTarget.z > 0)
+        if (IsInit)
         {
-            Quaternion rotation = Quaternion.LookRotation(_positionTarget);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, SpeedRotate * Time.deltaTime);
+            if (Scripts.NetWorkMB.IsClient)
+            {
+                if (_positionTarget.x > 0 || _positionTarget.z > 0)
+                {
+                    Quaternion rotation = Quaternion.LookRotation(_positionTarget);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, rotation, SpeedRotate * Time.deltaTime);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Space) && _inGround)
+                {
+                    MoveJump();
+                }
+                transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && _inGround)
-        {
-            MoveJump();
-        }
-        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
     }
     private void MoveJump()
     {

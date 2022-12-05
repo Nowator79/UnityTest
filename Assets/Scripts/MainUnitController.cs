@@ -8,6 +8,11 @@ public class MainUnitController : MonoBehaviour
     [SerializeField]
     protected bool AIOn = true;
     protected float _timeStart;
+
+    public virtual void Init()
+    {
+
+    }
     public virtual Vector3 PositionTarget
     {
         set
