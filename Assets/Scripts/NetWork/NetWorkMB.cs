@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
 using static Scripts.Modules.NetWork;
@@ -41,7 +42,7 @@ namespace Scripts
                 listenHandler.Dispose();
             }
         }
-        public async void Disconnect()
+        public void Disconnect()
         {
             IsConnectd = false;
         }
@@ -51,12 +52,16 @@ namespace Scripts
             //Асинхронный цикл получения данных
             IsClient = false;
             _ = Listen(PortServer);
-            _ = PingUsers();
-            GameStatus gameStatus = GameStatus.Get();
+            GameStatus gameStatus = GameStatus.StaticGameStatus;
             gameStatus.StartGame();
             UIDebug.Log($"Is server");
         }
         private async Task Listen(int port)
+        {
+            Task listenUdp = ListenUdp(port);
+            Task listenTcp = ListenTcp(port);
+        }
+        private async Task ListenUdp(int port)
         {
             NetWorkGet.UdpOpenPort(port);
 
@@ -66,7 +71,21 @@ namespace Scripts
                 CommandRout(command);
             }
         }
+        private async Task ListenTcp(int port)
+        {
+            NetWorkGet.TcpInitServer(port);
 
+            while (true)
+            {
+                NetworkStream stream = await NetWorkGet.TcpGetStream();
+                UIDebug.Log("Connect");
+                //CommandRout(command);
+            }
+            async Task GetMessage()
+            {
+
+            }
+        }
         private async Task<bool> Connect(string IPAddres, int Port)
         {
             //Соединение для отправки сообщений
@@ -74,6 +93,9 @@ namespace Scripts
             addressServer = new();
             addressServer.SetEndPoint(IPAddres, Port);
             addressServer.UdpConnect();
+            addressServer.TcpConnect();
+            UIDebug.Log(await addressServer.TcpSend("connect"));
+
             string localIp = NetWorkGet.GetIP();
             //Посылаем пакет данных показывающий подсоединение для сервера.(Переделать в угоду безопастности)
             CommandTemplate template = new()

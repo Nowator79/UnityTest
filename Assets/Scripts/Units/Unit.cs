@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int ID = 0;
+    public void Print()
     {
-        
+        Debug.Log($"{gameObject.name}");
     }
-
-    // Update is called once per frame
-    void Update()
+    public Unit InitObject(Vector3 position)
     {
-        
+        Unit unit = Instantiate(gameObject).GetComponent<Unit>();
+        unit.transform.position = position;
+        return unit;
     }
 }

@@ -1,3 +1,4 @@
+using Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,18 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class CameraMove : MonoBehaviour
 {
+
+    public static CameraMove StaticCameraMove;
+    private CameraMove()
+    {
+        StaticCameraMove = this;
+    }
+
+    public void SetTarget(Transform transform)
+    {
+        Target = transform;
+    }
+
     [SerializeField]
     private Transform Target;
     [SerializeField]

@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -13,13 +15,12 @@ namespace Scripts.Modules
 {
     public class NetWork
     {
-        public static class NetWorkGet 
+        public static class NetWorkGet
         {
             public static Socket udpSocket;
             public static IPEndPoint localIp;
             public static EndPoint remoteIp;
             public static TcpListener tcpListener;
-
 
             public static string GetIP()
             {
@@ -59,46 +60,36 @@ namespace Scripts.Modules
                     return message;
                 }
             }
-
             public static void TcpInitServer(int port)
             {
                 tcpListener = new TcpListener(IPAddress.Any, port);
             }
-            public static async Task TcpGetMessage()
+            public static async Task<NetworkStream> TcpGetStream()
             {
 
                 tcpListener.Start();
-                Console.WriteLine("Сервер запущен. Ожидание подключений... ");
 
                 while (true)
                 {
-                    using var tcpClient = await tcpListener.AcceptTcpClientAsync();
-                    var stream = tcpClient.GetStream();
-                    var response = new List<byte>();
-                    int bytesRead = 10;
-                    while ((bytesRead = stream.ReadByte()) != '\n')
-                    {
-                        response.Add((byte)bytesRead);
-                    }
-                    var request = Encoding.UTF8.GetString(response.ToArray());
-                    if (request == "END") break;
-
-                    Console.WriteLine($"Запрос {request}");
-                    response.Clear();
-                    string result = "result" + "\n";
-                    Console.WriteLine($"Ответ {result}");
-                    await stream.WriteAsync(Encoding.UTF8.GetBytes(result));
-
+                    using TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
+                    NetworkStream stream = tcpClient.GetStream();
+                    return stream;
                 }
+            }
+            public static async void TcpWriteResult(string result, NetworkStream stream)
+            {
+                await stream.WriteAsync(Encoding.UTF8.GetBytes(result));
             }
 
         }
-        public class NetWorkSend {
+        public class NetWorkSend
+        {
             private EndPoint remotePoint;
             private Socket udpSocket;
             private TcpClient tcpClient;
             private string ip;
             private int port;
+
             public void SetEndPoint(string ipAddressRemote, int port)
             {
                 remotePoint = new IPEndPoint(IPAddress.Parse(ipAddressRemote), port);
@@ -119,35 +110,22 @@ namespace Scripts.Modules
                 tcpClient = new TcpClient();
                 await tcpClient.ConnectAsync(ip, port);
             }
-            public async Task TcpSend(string message)
+            public async Task<string> TcpSend(string message)
             {
-                // слова для отправки для получения перевода
-                var words = new string[] { "red", "yellow", "blue" };
-                // получаем NetworkStream для взаимодействия с сервером
                 var stream = tcpClient.GetStream();
-
-                // буфер для входящих данных
                 var response = new List<byte>();
-                int bytesRead = 10; // для считывания байтов из потока
-                                    // считыванием строку в массив байт
-                                    // при отправке добавляем маркер завершения сообщения - \n
+                int bytesRead = 10;
                 byte[] data = Encoding.UTF8.GetBytes(message + '\n');
-                // отправляем данные
                 await stream.WriteAsync(data);
-
-                // считываем данные до конечного символа
                 while ((bytesRead = stream.ReadByte()) != '\n')
                 {
-                    // добавляем в буфер
                     response.Add((byte)bytesRead);
                 }
                 var translation = Encoding.UTF8.GetString(response.ToArray());
-                Console.WriteLine($"Слово {message}: {translation}");
                 response.Clear();
 
-                // отправляем маркер завершения подключения - END
                 await stream.WriteAsync(Encoding.UTF8.GetBytes("END\n"));
-                Console.WriteLine("Все сообщения отправлены");
+                return translation;
             }
             public async void Requst(string message)
             {
