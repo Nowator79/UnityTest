@@ -56,6 +56,8 @@ namespace Scripts
             Listen(PortServer);
             GameStatus gameStatus = GameStatus.StaticGameStatus;
             gameStatus.StartGame();
+            UIDebug.Log("Start server");
+
         }
         private void Listen(int port)
         {
@@ -76,17 +78,13 @@ namespace Scripts
         private async Task ListenTcp(int port)
         {
             NetWorkGet.TcpInitServer(port);
-            Debug.Log("StartListen");
 
             while (true)
             {
                 tcpListenMessage = NetWorkGet.TcpListenMessage(
                     (string responce, NetWorkGet.StringResult result) =>
                     {
-
                         result.str = CommendRouting.CommandRout(responce, "tcp");
-                        //UIDebug.Log($"responce: {responce}");
-                        //UIDebug.Log($"result: {result.str}");
                     }
                 );
                 await tcpListenMessage;
@@ -101,7 +99,7 @@ namespace Scripts
         {
             addressServer = new();
             addressServer.SetEndPoint(IPAddres, Port);
-            await SendRequst("TryConnect");
+            await SendRequst("TryConnect", true);
 
             int WaitSecunds = 5;
             for (int i = 0; i < WaitSecunds; i++)
@@ -133,7 +131,7 @@ namespace Scripts
         {
             command.UserName = NetWorkGet.GetHostName();
         }
-        public async Task SendRequst(string TypeCommand)
+        public async Task SendRequst(string TypeCommand, bool responce = false)
         {
             CommandTemplate tryConnect = new()
             {
@@ -142,17 +140,24 @@ namespace Scripts
 
             SetNameToCommend(ref tryConnect);
 
-
-            await addressServer.TcpRequst(
-                tryConnect.ToString(),
-                (result) =>
-                {
-                    NetWorkResult netWorkResult = new(result);
-                    netWorkResult.SetTcp();
-                    QureyReader.StaticQureyReader.SetProcessing(netWorkResult);
-                }
-            );
-
+            if (responce)
+            {
+                await addressServer.TcpRequst(
+                    tryConnect.ToString(),
+                    (result) =>
+                    {
+                        NetWorkResult netWorkResult = new(result);
+                        netWorkResult.SetTcp();
+                        QureyReader.StaticQureyReader.SetProcessing(netWorkResult);
+                    }
+                );
+            }
+            else
+            {
+                await addressServer.TcpRequst(
+                  tryConnect.ToString()
+              );
+            }
         }
     }
 }

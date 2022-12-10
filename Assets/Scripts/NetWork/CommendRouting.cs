@@ -30,10 +30,10 @@ public static class CommendRouting
                             }.ToString();
                             string name = command.UserName;
                             NetWorkPlayers.StaticNetWorkPlayers.Add(name);
+                            UIDebug.Log($"Player connected {name}");
                             break;
                         case "SuccessfulConnect":
                             NetWorkMB.StaticNetWorkMB.ClientStatus.ConnectSuccesful();
-                            UIDebug.Log($"Player connected");
                             break;
                         case "Successful":
                             result = new CommandTemplate()
