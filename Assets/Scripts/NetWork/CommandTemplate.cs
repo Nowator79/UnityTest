@@ -6,6 +6,7 @@ public struct CommandTemplate
 {
     public string TypeCommandStr;
     public string CustomStrData;
+    public string UserName;
 
     public override string ToString()
     {

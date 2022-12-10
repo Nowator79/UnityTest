@@ -8,19 +8,23 @@ public class UIDebug : MonoBehaviour
     [SerializeField]
     public TextMeshProUGUI LogText;
     public static UIDebug _UIDebug;
+    private readonly Queue<string> logs = new();
+
     public static void Log(string log)
     {
-        while (true)
-        {
-            if (_UIDebug)
-            {
-                _UIDebug.LogText.text += log + "\n";
-                break;
-            }
-        }
+        _UIDebug.logs.Enqueue(log);
     }
     private void Start()
     {
         _UIDebug = this;
     }
+    private void Update()
+    {
+        while (logs.Count > 0)
+        {
+            string result = logs.Dequeue();
+            _UIDebug.LogText.text += result + "\n";
+        }
+    }
+
 }

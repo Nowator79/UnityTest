@@ -4,16 +4,37 @@ using UnityEngine;
 
 public class CanvasControler : MonoBehaviour
 {
-    private static CanvasControler canvasControler;
-    private CanvasControler() { canvasControler = this; }
-    public static CanvasControler GetCanvas() { return canvasControler; }
+    public static CanvasControler StaticCanvasControler;
+    private CanvasControler() { StaticCanvasControler = this; }
 
     public UIGameMenu gameMenu;
     public UIMainMenu mainMenu;
 
+    public delegate void UpdateHandler();
+    public event UpdateHandler updateHandler;
 
-    void Update()
+    public List<UIBase> UIListHiddenAouto = new();
+
+    public void HiddenUIs()
     {
-        gameMenu.Controller();
+        foreach (UIBase ui in UIListHiddenAouto)
+        {
+            if (!ui.NoHidden)
+            {
+                ui.Hidden();
+            }
+        }
+    }
+
+    private void Update()
+    {
+        updateHandler?.Invoke();
+    }
+    private void Start()
+    {
+        foreach (UIBase ui in UIListHiddenAouto)
+        {
+            ui.Init();
+        }
     }
 }

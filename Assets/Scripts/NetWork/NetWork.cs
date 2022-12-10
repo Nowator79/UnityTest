@@ -27,7 +27,10 @@ namespace Scripts.Modules
                 string host = Dns.GetHostName();
                 IPAddress address = Dns.GetHostAddresses(host).First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
                 return localIp.Address.ToString();
-
+            }
+            public static string GetHostName()
+            {
+                return Dns.GetHostName();
             }
             public static string UdpInitServer(int port, ref string host)
             {
@@ -60,27 +63,53 @@ namespace Scripts.Modules
                     return message;
                 }
             }
+
             public static void TcpInitServer(int port)
             {
                 tcpListener = new TcpListener(IPAddress.Any, port);
             }
-            public static async Task<NetworkStream> TcpGetStream()
+         
+            public static async Task TcpListenMessage(Action<string, StringResult> responseHandler)
             {
-
                 tcpListener.Start();
 
-                while (true)
+                TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
+
+                NetworkStream stream = tcpClient.GetStream();
+                List<byte> response = new();
+                int bytesRead = 10;
+                while ((bytesRead = stream.ReadByte()) != '\n')
                 {
-                    using TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
-                    NetworkStream stream = tcpClient.GetStream();
-                    return stream;
+                    response.Add((byte)bytesRead);
+                }
+                string request = Encoding.UTF8.GetString(response.ToArray());
+                response.Clear();
+                string result = "";
+                StringResult stringResult = new StringResult(result);
+                responseHandler(request, stringResult);
+                stringResult.str += "\n";
+                await stream.WriteAsync(Encoding.UTF8.GetBytes(stringResult.str));
+            }
+            public class StringResult
+            {
+                public string str = "";
+                public StringResult(string str)
+                {
+                    this.str = str;
+                }
+                     
+            }
+            public static void Disconected()
+            {
+                try
+                {
+                    tcpListener.Stop();
+                }
+                catch
+                {
+                    Debug.Log("Вы еще не подключились");
                 }
             }
-            public static async void TcpWriteResult(string result, NetworkStream stream)
-            {
-                await stream.WriteAsync(Encoding.UTF8.GetBytes(result));
-            }
-
         }
         public class NetWorkSend
         {
@@ -105,32 +134,47 @@ namespace Scripts.Modules
                 byte[] data = Encoding.UTF8.GetBytes(message);
                 int bytes = await udpSocket.SendToAsync(data, SocketFlags.None, remotePoint);
             }
-            public async Task TcpConnect()
+            public void TcpConnect()
             {
                 tcpClient = new TcpClient();
-                await tcpClient.ConnectAsync(ip, port);
+                tcpClient.ConnectAsync(ip, port).Wait();
             }
             public async Task<string> TcpSend(string message)
             {
-                var stream = tcpClient.GetStream();
-                var response = new List<byte>();
+                NetworkStream stream = tcpClient.GetStream();
+
+                List<byte> response = new();
                 int bytesRead = 10;
                 byte[] data = Encoding.UTF8.GetBytes(message + '\n');
                 await stream.WriteAsync(data);
+
                 while ((bytesRead = stream.ReadByte()) != '\n')
                 {
                     response.Add((byte)bytesRead);
                 }
-                var translation = Encoding.UTF8.GetString(response.ToArray());
+                string result = Encoding.UTF8.GetString(response.ToArray());
                 response.Clear();
+                //await stream.WriteAsync(Encoding.UTF8.GetBytes("END\n"));
 
-                await stream.WriteAsync(Encoding.UTF8.GetBytes("END\n"));
-                return translation;
+                return result;
             }
-            public async void Requst(string message)
+            public async Task TcpRequst(string message)
             {
-                TcpConnect().Wait();
-                await TcpSend(message);
+                await Task.Run(() =>
+                {
+                    TcpConnect();
+                    Task sendTask = TcpSend(message);
+                    sendTask.Wait();
+                });
+            }
+            public async Task TcpRequst(string message, Action<string> handlerResult)
+            {
+                await Task.Run(async () =>
+                {
+                    TcpConnect();
+                    string result = await TcpSend(message);
+                    await Task.Run(() => handlerResult(result));
+                });
             }
         }
     }

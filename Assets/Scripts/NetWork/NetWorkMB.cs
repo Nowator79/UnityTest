@@ -1,21 +1,22 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using static Scripts.Modules.NetWork;
 
 namespace Scripts
 {
-    public class NetWorkMB : UIBase
+    public class NetWorkMB : MonoBehaviour
     {
         public static bool IsClient = true;
         private const int PortServer = 3002;
-        [SerializeField]
-        private bool IsConnectd = false;
-
-        [SerializeField]
-        private UINetWorkForm uINetWorkForm;
+        public Task connectListenTcp;
+        public Task tcpListenMessage;
+        private bool ServerIsStart = false;
+        public ClientStatus ClientStatus = new();
 
         private NetWorkSend addressServer;
 
@@ -26,11 +27,11 @@ namespace Scripts
         {
             StaticNetWorkMB = this;
         }
-   
+
         public async void ConnectToServer(string IPAddres, int Port)
         {
-            Task listenHandler = Listen(PortServer);
-            bool SuccessfulConnect =  await Connect(IPAddres, Port);
+            //Task listenHandler = Listen(PortServer);
+            bool SuccessfulConnect = await Connect(IPAddres, Port);
             if (SuccessfulConnect)
             {
                 UIDebug.Log($"Succesful connect to {IPAddres}:{Port}");
@@ -38,28 +39,29 @@ namespace Scripts
             else
             {
                 UIDebug.Log($"Unsuccesful connect to {IPAddres}:{Port}");
-                uINetWorkForm.gameObject.SetActive(true);
-                listenHandler.Dispose();
             }
         }
-        public void Disconnect()
+        public async void Disconnect()
         {
-            IsConnectd = false;
+            ServerIsStart = false;
+            NetWorkGet.Disconected();
+            await SendRequst("Disconected");
+            GameWorld.StaticGameWorld.Destroy();
         }
         public void StartServer()
         {
             //Открывем порт для получения данных
             //Асинхронный цикл получения данных
             IsClient = false;
-            _ = Listen(PortServer);
+            Listen(PortServer);
             GameStatus gameStatus = GameStatus.StaticGameStatus;
             gameStatus.StartGame();
-            UIDebug.Log($"Is server");
         }
-        private async Task Listen(int port)
+        private void Listen(int port)
         {
-            Task listenUdp = ListenUdp(port);
-            Task listenTcp = ListenTcp(port);
+            ServerIsStart = true;
+            //Task listenUdp = ListenUdp(port);
+            connectListenTcp = ListenTcp(port);
         }
         private async Task ListenUdp(int port)
         {
@@ -68,101 +70,89 @@ namespace Scripts
             while (true)
             {
                 string command = await NetWorkGet.UdpGetMessage();
-                CommandRout(command);
+                //CommandRout(command, "udp");
             }
         }
         private async Task ListenTcp(int port)
         {
             NetWorkGet.TcpInitServer(port);
+            Debug.Log("StartListen");
 
             while (true)
             {
-                NetworkStream stream = await NetWorkGet.TcpGetStream();
-                UIDebug.Log("Connect");
-                //CommandRout(command);
-            }
-            async Task GetMessage()
-            {
+                tcpListenMessage = NetWorkGet.TcpListenMessage(
+                    (string responce, NetWorkGet.StringResult result) =>
+                    {
 
+                        result.str = CommendRouting.CommandRout(responce, "tcp");
+                        //UIDebug.Log($"responce: {responce}");
+                        //UIDebug.Log($"result: {result.str}");
+                    }
+                );
+                await tcpListenMessage;
+                if (!ServerIsStart)
+                {
+                    UIDebug.Log("Close server");
+                    break;
+                }
             }
         }
         private async Task<bool> Connect(string IPAddres, int Port)
         {
-            //Соединение для отправки сообщений
-            //Куда будут слаться сообщения
             addressServer = new();
             addressServer.SetEndPoint(IPAddres, Port);
-            addressServer.UdpConnect();
-            addressServer.TcpConnect();
-            UIDebug.Log(await addressServer.TcpSend("connect"));
+            await SendRequst("TryConnect");
 
-            string localIp = NetWorkGet.GetIP();
-            //Посылаем пакет данных показывающий подсоединение для сервера.(Переделать в угоду безопастности)
-            CommandTemplate template = new()
+            int WaitSecunds = 5;
+            for (int i = 0; i < WaitSecunds; i++)
             {
-                TypeCommandStr = "Connect",
-                CustomStrData = localIp
-            };
-
-            SendCommand(addressServer, template);
-            //Ждем ответ от сервера в течение 5 сек
-            for (int i = 0; i < 5; i++)
-            {
-                if (IsConnectd)
+                if (ClientStatus.IsWait)
                 {
-                    break;
+                    continue;
                 }
-                await Task.Delay(1000);
-            }
-          
-            return IsConnectd;
-        }
-        private void CommandRout(string command)
-        {
-            CommandTemplate myObject = JsonConvert.DeserializeObject<CommandTemplate>(command);
-            Debug.Log(command);
-
-            if (myObject.TypeCommandStr != "")
-            {
-                //команды которые надо использовать
-                switch (myObject.TypeCommandStr)
+                if (ClientStatus.IsConnect)
                 {
-                    case "Connect":
-                        UIDebug.Log($"Player connected: {myObject.CustomStrData}");
-                        CommandTemplate SuccessfulConnect = new()
-                        {
-                            TypeCommandStr = "SuccesfulConnect",
-                        };
-                        NetWorkSend player = new();
-                        player.SetEndPoint(myObject.CustomStrData, PortServer);
-                        player.UdpConnect();
-                        playersNetWork.Add(player);
-                        SendCommand(player, SuccessfulConnect);
-                        break;
-                    case "SuccesfulConnect":
-                        IsConnectd = true;
-                        break;
-                    case "ping":
-                        UIDebug.Log($"Ping");
-                        break;
+                    return true;
                 }
+                if (ClientStatus.IsDisconnect)
+                {
+                    return false;
+                }
+
+                Task.Delay(1000).Wait();
             }
+            ClientStatus.ConnectUnSuccessful();
+            return false;
         }
-        public void SendCommand(NetWorkSend remoteServer, CommandTemplate typeCommand )
+        public void SendCommand(NetWorkSend remoteServer, CommandTemplate typeCommand)
         {
-            Debug.Log(typeCommand);
+            UIDebug.Log(typeCommand.ToString());
             Task task = remoteServer.UdpSend(typeCommand.ToString());
         }
-        private async Task PingUsers()
+        public void SetNameToCommend(ref CommandTemplate command)
         {
-            while (true)
+            command.UserName = NetWorkGet.GetHostName();
+        }
+        public async Task SendRequst(string TypeCommand)
+        {
+            CommandTemplate tryConnect = new()
             {
-                foreach (NetWorkSend player in playersNetWork)
+                TypeCommandStr = TypeCommand,
+            };
+
+            SetNameToCommend(ref tryConnect);
+
+
+            await addressServer.TcpRequst(
+                tryConnect.ToString(),
+                (result) =>
                 {
-                    await player.UdpSend(CommandTemplate.PingCommand.ToString());
+                    NetWorkResult netWorkResult = new(result);
+                    netWorkResult.SetTcp();
+                    QureyReader.StaticQureyReader.SetProcessing(netWorkResult);
                 }
-                await Task.Delay(1000);
-            }
+            );
+
         }
     }
 }

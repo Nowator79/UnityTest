@@ -13,13 +13,19 @@ public class UIGameMenu : UIBase
     public void Disconnect()
     {
         StaticNetWorkMB.Disconnect();
+        CanvasControler.StaticCanvasControler.mainMenu.Show();
     }
-    public void Controller()
+    private void Controller()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             curStatus = !curStatus;
             gameObject.SetActive(curStatus);
         }
+    }
+    public override void Init()
+    {
+        base.Init();
+        CanvasControler.StaticCanvasControler.updateHandler += Controller;
     }
 }

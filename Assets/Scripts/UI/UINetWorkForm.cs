@@ -46,7 +46,7 @@ public class UINetWorkForm : UIBase
     }
     public void Cancel()
     {
-        CanvasControler.GetCanvas().mainMenu.Show();
+        CanvasControler.StaticCanvasControler.mainMenu.Show();
         Hidden();
     }
 

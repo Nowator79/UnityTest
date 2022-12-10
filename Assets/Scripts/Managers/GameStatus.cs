@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameStatus : MonoBehaviour
@@ -9,6 +10,7 @@ public class GameStatus : MonoBehaviour
     private void Start()
     {
         GameWorld = GetComponent<GameWorld>();
+        UIMainMenu.StaticUIMainMenu.Show();
     }
 
     private bool isGameing;
@@ -20,4 +22,5 @@ public class GameStatus : MonoBehaviour
 
     public static GameStatus StaticGameStatus;
     private GameStatus() { StaticGameStatus = this; }
+
 }
