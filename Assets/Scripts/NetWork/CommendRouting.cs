@@ -13,6 +13,7 @@ public static class CommendRouting
         BaseCommand.Inclde(new Successful());
         BaseCommand.Inclde(new Disconected());
         BaseCommand.Inclde(new ErrorRequst());
+        BaseCommand.Inclde(new GetOnline());
     }
     public static string CommandRout(string command, string type)
     {

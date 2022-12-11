@@ -35,6 +35,7 @@ namespace Scripts
             if (SuccessfulConnect)
             {
                 UIDebug.Log($"Succesful connect to {IPAddres}:{Port}");
+                await SendRequst("GetOnline", true);
             }
             else
             {
