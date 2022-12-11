@@ -17,20 +17,17 @@ namespace Scripts
         public Task tcpListenMessage;
         private bool ServerIsStart = false;
         public ClientStatus ClientStatus = new();
-
         private NetWorkSend addressServer;
-
         private List<NetWorkSend> playersNetWork = new();
-
         public static NetWorkMB StaticNetWorkMB;
         private NetWorkMB()
         {
             StaticNetWorkMB = this;
+            CommendRouting.IncludeCommands();
         }
 
         public async void ConnectToServer(string IPAddres, int Port)
         {
-            //Task listenHandler = Listen(PortServer);
             bool SuccessfulConnect = await Connect(IPAddres, Port);
             if (SuccessfulConnect)
             {

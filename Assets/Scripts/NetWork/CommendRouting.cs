@@ -1,10 +1,19 @@
 using Newtonsoft.Json;
-using Scripts;
 using System;
 using UnityEngine;
 
 public static class CommendRouting
 {
+    public static void IncludeCommands()
+    {
+        BaseCommand.Inclde(new ConnectCommand());
+        BaseCommand.Inclde(new DisconnectCommand());
+        BaseCommand.Inclde(new TryConnect());
+        BaseCommand.Inclde(new SuccessfulConnect());
+        BaseCommand.Inclde(new Successful());
+        BaseCommand.Inclde(new Disconected());
+        BaseCommand.Inclde(new ErrorRequst());
+    }
     public static string CommandRout(string command, string type)
     {
         string result = "";
@@ -18,40 +27,9 @@ public static class CommendRouting
             }
             void tcpRout(CommandTemplate command)
             {
-                if (myObject.TypeCommandStr != "")
+                if (command.TypeCommandStr != "")
                 {
-                    //команды которые надо использовать
-                    switch (myObject.TypeCommandStr)
-                    {
-                        case "TryConnect":
-                            result = new CommandTemplate()
-                            {
-                                TypeCommandStr = "SuccessfulConnect",
-                            }.ToString();
-                            string name = command.UserName;
-                            NetWorkPlayers.StaticNetWorkPlayers.Add(name);
-                            UIDebug.Log($"Player connected {name}");
-                            break;
-                        case "SuccessfulConnect":
-                            NetWorkMB.StaticNetWorkMB.ClientStatus.ConnectSuccesful();
-                            break;
-                        case "Successful":
-                            result = new CommandTemplate()
-                            {
-                                TypeCommandStr = "Successful",
-                            }.ToString();
-                            break;
-                        case "Disconected":
-                            NetWorkPlayers.StaticNetWorkPlayers.RemoveByName(command.UserName);
-                            UIDebug.Log($"Disconect: {command.UserName}");
-                            break;
-                        case "ErrorRequst":
-                            UIDebug.Log($"ErrorRequst");
-                            break;
-                        default:
-                            UIDebug.Log($"Ќе удалось обработать комманду {command.TypeCommandStr} type: {type}");
-                            break;
-                    }
+                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command);
                 }
             }
             void udpRout(CommandTemplate command)
