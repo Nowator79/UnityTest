@@ -1,4 +1,5 @@
 using NetWork.TypeJsonBody;
+using UnityEngine;
 
 public class SetWorldObject : BaseCommand
 {
@@ -7,7 +8,8 @@ public class SetWorldObject : BaseCommand
         World world = command.GetJsonBody<World>();
         foreach (World.GameObject element in world.objects)
         {
-            DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[element.Id].CreateObject();
+            Unit unit = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[element.Id].CreateObject();
+            unit.transform.SetPositionAndRotation(new(element.Position.X, element.Position.Y, element.Position.Z), Quaternion.Euler(new(element.Rotation.X, element.Rotation.Y, element.Rotation.Z)));
         }
         return "";
     }

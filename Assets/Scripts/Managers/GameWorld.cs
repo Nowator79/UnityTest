@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameWorld : MonoBehaviour
@@ -22,5 +23,9 @@ public class GameWorld : MonoBehaviour
         }
         UnitsList.Clear();
         CameraMove.StaticCameraMove.SetTarget(gameObject.transform);
+    }
+    public Unit FindUnitById(int Id)
+    {
+        return UnitsList.Where(p => p.ID == Id).FirstOrDefault();
     }
 }

@@ -16,4 +16,8 @@ public class Unit : MonoBehaviour
 
         return unit;
     }
+    public void SetCamera()
+    {
+        CameraMove.StaticCameraMove.SetTarget(transform);
+    }
 }

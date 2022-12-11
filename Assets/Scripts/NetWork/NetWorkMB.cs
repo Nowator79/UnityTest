@@ -37,6 +37,7 @@ namespace Scripts
                 UIDebug.Log($"Succesful connect to {IPAddres}:{Port}");
                 await SendRequst("GetOnline", true);
                 await SendRequst("GetWorldObject", true);
+                GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
             }
             else
             {

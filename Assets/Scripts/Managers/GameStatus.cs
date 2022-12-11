@@ -7,6 +7,7 @@ public class GameStatus : MonoBehaviour
 {
     private GameWorld GameWorld;
     public string PlayerName = "";
+    public int PlayerId;
     private void Start()
     {
         GameWorld = GetComponent<GameWorld>();

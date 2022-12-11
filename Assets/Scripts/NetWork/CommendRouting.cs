@@ -15,7 +15,7 @@ public static class CommendRouting
         BaseCommand.Inclde(new ErrorRequst());
         BaseCommand.Inclde(new GetOnline());
         BaseCommand.Inclde(new OnlineList()); 
-        BaseCommand.Inclde(new GetWorldObject()); 
+        BaseCommand.Inclde(new GetWorldObject());   
         BaseCommand.Inclde(new SetWorldObject()); 
     }
     public static string CommandRout(string command, string type)
