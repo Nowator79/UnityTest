@@ -6,8 +6,7 @@ public struct PlayersListOnline
 {
     public List<Player> PlayerList;
     [Serializable]
-    public struct Player
-    {
+    public struct Player{
         public string Name;
     }
 }

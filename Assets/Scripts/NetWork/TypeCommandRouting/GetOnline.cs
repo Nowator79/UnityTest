@@ -4,7 +4,7 @@ public class GetOnline : BaseCommand
     {
         CommandTemplate resultCommand = new() { TypeCommandStr = "OnlineList" };
         PlayersListOnline playersList = new();
-
+        playersList.PlayerList = new System.Collections.Generic.List<PlayersListOnline.Player>();
         foreach (var player in NetWorkPlayers.StaticNetWorkPlayers.PlayersList)
         {
             playersList.PlayerList.Add(new PlayersListOnline.Player() { Name= player.Value.Name });
