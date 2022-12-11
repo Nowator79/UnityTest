@@ -107,7 +107,6 @@ namespace Scripts.Modules
                 }
                 catch
                 {
-                    Debug.Log("Вы еще не подключились");
                 }
             }
         }

@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using UnityEngine;
 
 public class BaseCommand
 {
@@ -12,14 +13,16 @@ public class BaseCommand
     }
     public static bool Inclde(BaseCommand command)
     {
+        string name = command.GetType().Name;
+
         BaseCommand tmp;
-        if (Commands.TryGetValue(command.GetType().Name, out tmp))
+        if (Commands.TryGetValue(name, out tmp))
         {
             UIDebug.Log("Erorr");
         }
         else
         {
-            Commands.Add(command.GetType().Name, command);
+            Commands.Add(name, command);
         }
         return true;
     }

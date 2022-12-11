@@ -23,6 +23,9 @@ namespace Scripts
         private NetWorkMB()
         {
             StaticNetWorkMB = this;
+        }
+        private void Start()
+        {
             CommendRouting.IncludeCommands();
         }
 
