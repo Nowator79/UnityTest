@@ -12,17 +12,20 @@ public class Player : Unit
     [SerializeField]
     private float speed;
     private float jumpSpeed = 0;
-
+    private bool IsControl = false;
     private void Start()
     {
         CharacterController = GetComponent<CharacterController>();
     }
-
     private void Update()
     {
-        float horizontal = 0;
-        float vertical = 0;
-
+        if (IsControl)
+        {
+            Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Input.GetKeyDown(KeyCode.Space));
+        }
+    }
+    private void Move(float horizontal = 0, float vertical = 0, bool jump = false)
+    {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         if (CharacterController.isGrounded)
@@ -35,7 +38,12 @@ public class Player : Unit
         }
         jumpSpeed += gravity * Time.deltaTime * 3f;
         float dirSpeed = speed * Time.deltaTime;
-        Vector3 dir = new (horizontal * dirSpeed, jumpSpeed * Time.deltaTime, vertical * dirSpeed);
+        Vector3 dir = new(horizontal * dirSpeed, jumpSpeed * Time.deltaTime, vertical * dirSpeed);
         CharacterController.Move(dir);
+    }
+    public void SetControl()
+    {
+        IsControl = true;
+        CameraMove.StaticCameraMove.SetTarget(transform);
     }
 }

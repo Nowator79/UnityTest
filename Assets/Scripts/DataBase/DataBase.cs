@@ -1,21 +1,18 @@
-using System.Collections;
+using DataBase.Units;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class DataBase : MonoBehaviour
+namespace DataBase
 {
-    public UnitsDataBase UnitsDataBase;
-    public static DataBase StaticDateBase;
-    private DataBase()
+    public class DataBase : MonoBehaviour
     {
-        StaticDateBase = this;
-    }
-    private void Start()
-    {
-        for (int i = 0; i < UnitsDataBase.Units.Count; i++)
+        public UnitsDataBase UnitsDataBase;
+        public static DataBase StaticDateBase;
+        public Dictionary<string, int> TypeUnits = new();
+        private DataBase()
         {
-            Unit unit = UnitsDataBase.Units[i];
-            unit.ID = i;
-        } 
+            StaticDateBase = this;
+        }
     }
 }

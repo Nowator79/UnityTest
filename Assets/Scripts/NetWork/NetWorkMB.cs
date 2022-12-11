@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -36,6 +36,7 @@ namespace Scripts
             {
                 UIDebug.Log($"Succesful connect to {IPAddres}:{Port}");
                 await SendRequst("GetOnline", true);
+                await SendRequst("GetWorldObject", true);
             }
             else
             {
@@ -54,7 +55,7 @@ namespace Scripts
             IsClient = false;
             Listen(PortServer);
             GameStatus gameStatus = GameStatus.StaticGameStatus;
-            gameStatus.StartGame();
+            gameStatus.StartGameServer();
             UIDebug.Log("Start server");
             NetWorkPlayers.StaticNetWorkPlayers.Add(GameStatus.StaticGameStatus.PlayerName);
         }

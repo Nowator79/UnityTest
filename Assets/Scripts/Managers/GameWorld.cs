@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,13 +8,11 @@ public class GameWorld : MonoBehaviour
     {
         StaticGameWorld = this;
     }
-    public List<Unit> UnitsList = new List<Unit>();
+    public List<Unit> UnitsList = new();
     public void InintGameWorld()
     {
-        Unit player = DataBase.StaticDateBase.UnitsDataBase.Units[0].InitObject(new Vector3(0, 0, 0));
-        CameraMove.StaticCameraMove.SetTarget(player.transform);
-
-        UnitsList.Add(player);
+        Player player = (Player)DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
+        player.SetControl();
     }
     public void Destroy()
     {

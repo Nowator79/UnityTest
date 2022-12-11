@@ -15,7 +15,7 @@ public class GameStatus : MonoBehaviour
 
     private bool isGameing;
     public bool IsGameing { get { return isGameing; } }
-    public void StartGame() {
+    public void StartGameServer() {
         GameWorld.InintGameWorld();
         isGameing = true; 
     }

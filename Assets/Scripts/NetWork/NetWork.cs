@@ -1,15 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Scripts.Modules
 {
@@ -153,7 +148,6 @@ namespace Scripts.Modules
                 }
                 string result = Encoding.UTF8.GetString(response.ToArray());
                 response.Clear();
-                //await stream.WriteAsync(Encoding.UTF8.GetBytes("END\n"));
 
                 return result;
             }
