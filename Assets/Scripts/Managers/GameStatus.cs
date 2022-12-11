@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameStatus : MonoBehaviour
 {
     private GameWorld GameWorld;
-
+    public string PlayerName = "";
     private void Start()
     {
         GameWorld = GetComponent<GameWorld>();

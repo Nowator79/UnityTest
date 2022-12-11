@@ -12,6 +12,8 @@ public class UINetWorkForm : UIBase
     [SerializeField]
     private TMP_InputField InputPort;
     [SerializeField]
+    private TMP_InputField InputPlayerName;
+    [SerializeField]
     private NetWorkMB NetWork;
 
     [SerializeField]
@@ -36,11 +38,13 @@ public class UINetWorkForm : UIBase
     {
         string ip = InputIP.text;
         int port = Convert.ToInt32(InputPort.text);
+        GameStatus.StaticGameStatus.PlayerName = InputPlayerName.text;
         NetWork.ConnectToServer(ip, port);
         Hidden();
     }
     public void CreateServer()
     {
+        GameStatus.StaticGameStatus.PlayerName = InputPlayerName.text;
         NetWork.StartServer();
         Hidden();
     }

@@ -51,14 +51,12 @@ namespace Scripts
         }
         public void StartServer()
         {
-            //Открывем порт для получения данных
-            //Асинхронный цикл получения данных
             IsClient = false;
             Listen(PortServer);
             GameStatus gameStatus = GameStatus.StaticGameStatus;
             gameStatus.StartGame();
             UIDebug.Log("Start server");
-
+            NetWorkPlayers.StaticNetWorkPlayers.Add(GameStatus.StaticGameStatus.PlayerName);
         }
         private void Listen(int port)
         {
@@ -130,7 +128,7 @@ namespace Scripts
         }
         public void SetNameToCommend(ref CommandTemplate command)
         {
-            command.UserName = NetWorkGet.GetHostName();
+            command.UserName = GameStatus.StaticGameStatus.PlayerName;
         }
         public async Task SendRequst(string TypeCommand, bool responce = false)
         {
