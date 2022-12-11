@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: UnitsDB
   m_EditorClassIdentifier: 
   Units:
+  - {fileID: 0}
   - {fileID: 5738527870283550444, guid: b29446b8a9be9df4aa21cfc204bf10c6, type: 3}
