@@ -4,6 +4,7 @@ public class Unit : MonoBehaviour
 {
     public int IdType = 0;
     public int ID = 0;
+    public static int IDIter = 0;
     public void Print()
     {
         Debug.Log($"{gameObject.name}");
@@ -13,6 +14,7 @@ public class Unit : MonoBehaviour
         Unit unit = Instantiate(gameObject).GetComponent<Unit>();
         unit.transform.position = position;
         GameWorld.StaticGameWorld.UnitsList.Add(unit);
+        unit.ID = IDIter++;
 
         return unit;
     }

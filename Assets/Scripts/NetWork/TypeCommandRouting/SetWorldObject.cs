@@ -9,6 +9,7 @@ public class SetWorldObject : BaseCommand
         foreach (World.GameObject element in world.objects)
         {
             Unit unit = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[element.Id].CreateObject();
+            unit.ID = element.Id;
             unit.transform.SetPositionAndRotation(new(element.Position.X, element.Position.Y, element.Position.Z), Quaternion.Euler(new(element.Rotation.X, element.Rotation.Y, element.Rotation.Z)));
         }
         return "";

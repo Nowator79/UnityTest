@@ -30,12 +30,10 @@ public class Player : Unit
     }
     private void Move(float horizontal = 0, float vertical = 0, bool jump = false)
     {
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
         if (CharacterController.isGrounded)
         {
             jumpSpeed = 0;
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (jump)
             {
                 jumpSpeed = jumpForse;
             }
