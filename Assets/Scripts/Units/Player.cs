@@ -23,6 +23,10 @@ public class Player : Unit
         {
             Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Input.GetKeyDown(KeyCode.Space));
         }
+        else
+        {
+            Move();
+        }
     }
     private void Move(float horizontal = 0, float vertical = 0, bool jump = false)
     {
