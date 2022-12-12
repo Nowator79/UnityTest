@@ -12,6 +12,7 @@ public class Player : Unit
     [SerializeField]
     private float speed;
     private float jumpSpeed = 0;
+    [SerializeField]
     private bool IsControl = false;
     private void Start()
     {
