@@ -8,7 +8,6 @@ public class TryConnect : BaseCommand
         
         string name = command.UserName;
         Unit player = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
-        GameStatus.StaticGameStatus.PlayerId = player.ID;
         NetWorkPlayers.StaticNetWorkPlayers.Add(name);
         UIDebug.Log($"Player connected {name}");
 
@@ -16,7 +15,7 @@ public class TryConnect : BaseCommand
         {
             TypeCommandStr = "SuccessfulConnect",
         };
-        commandTemplate.SetJsonBody(new ServerInfo(GameStatus.StaticGameStatus.PlayerId, "serverName"));
+        commandTemplate.SetJsonBody(new ServerInfo(player.ID, "serverName"));
 
         string result = commandTemplate.ToString();
         return result;

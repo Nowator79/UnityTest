@@ -1,10 +1,6 @@
- using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using static Scripts.Modules.NetWork;
 
 namespace Scripts
@@ -18,7 +14,6 @@ namespace Scripts
         private bool ServerIsStart = false;
         public ClientStatus ClientStatus = new();
         private NetWorkSend addressServer;
-        private List<NetWorkSend> playersNetWork = new();
         public static NetWorkMB StaticNetWorkMB;
         private NetWorkMB()
         {

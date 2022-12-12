@@ -10,7 +10,7 @@ public class GetWorldObject : BaseCommand
 
         foreach (Unit unity in GameWorld.StaticGameWorld.UnitsList)
         {
-            objects.Add(new World.GameObject(unity.IdType, new(unity.transform.position), new(unity.transform.rotation.eulerAngles)));
+            objects.Add(new World.GameObject(unity.ID, unity.IdType, new(unity.transform.position), new(unity.transform.rotation.eulerAngles)));
             
         }
         World world = new(objects);
