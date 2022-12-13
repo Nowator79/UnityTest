@@ -9,7 +9,7 @@ namespace Scripts
     public class NetWorkMB : MonoBehaviour
     {
         public static bool IsClient = true;
-        public const int PortServer = 3002;
+        public const int PortServer = 5025;
         public Task connectListenTcp;
         public Task tcpListenMessage;
         public Task udpClientListenMessage;
@@ -18,7 +18,7 @@ namespace Scripts
         public ClientStatus ClientStatus = new();
         private NetWorkSend addressServer;
         public static NetWorkMB StaticNetWorkMB;
-        public List<NetWorkSend> UdpListClients = new();
+        public List<NetWorkSend> UdpListClients { get; set; } = new();
         private NetWorkMB()
         {
             StaticNetWorkMB = this;
@@ -27,7 +27,7 @@ namespace Scripts
         {
             CommendRouting.IncludeCommands();
         }
-
+    
         public async void ConnectToServer(string IPAddres, int Port)
         {
             bool SuccessfulConnect = await Connect(IPAddres, Port);
@@ -60,7 +60,7 @@ namespace Scripts
             gameStatus.StartGameServer();
             UIDebug.Log("Start server");
             NetWorkPlayers.StaticNetWorkPlayers.Add(GameStatus.StaticGameStatus.PlayerName);
-            syncPosition = SyncPosition();
+            InvokeRepeating(nameof(SyncPositionInvoke), 0, 1);
         }
         private void Listen(int port)
         {
@@ -164,20 +164,29 @@ namespace Scripts
               );
             }
         }
-        public async Task SyncPosition()
+        public void SyncPosition()
         {
-            await Task.Run( () => {
-                while (true)
-                {
-                    foreach (NetWorkSend player in UdpListClients)
-                    {
-                        CommandTemplate command = new() { TypeCommandStr = "MoveObjectWorldObject" };
-                        command.SetJsonBody(GameWorld.StaticGameWorld.GetWorld()); ;
-                        player.UdpSend(command.ToString());
-                    }
-                }
-            });
+            
+          
 
+        }
+        public void SyncPositionInvoke()
+        {
+            Debug.Log("invoke");
+            foreach (NetWorkSend player in UdpListClients)
+            {
+                try
+                {
+                    CommandTemplate command = new() { TypeCommandStr = "MoveObjectWorldObject" };
+                    command.SetJsonBody(GameWorld.StaticGameWorld.GetWorld());
+                    Debug.Log(command.ToString());
+                    player.UdpSend(command.ToString());
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogException(e);
+                }
+            }
         }
     }
 }

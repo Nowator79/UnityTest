@@ -113,8 +113,8 @@ namespace Scripts.Modules
             private EndPoint remotePoint;
             private Socket udpSocket;
             private TcpClient tcpClient;
-            private string ip;
-            private int port;
+            public string ip { get; private set; }
+            public int port;
 
             public void SetEndPoint(string ipAddressRemote, int port)
             {
@@ -128,6 +128,7 @@ namespace Scripts.Modules
             }
             public async Task UdpSend(string message)
             {
+                Debug.Log($"send: udp,  remotePoint: {ip}");
                 byte[] data = Encoding.UTF8.GetBytes(message);
                 int bytes = await udpSocket.SendToAsync(data, SocketFlags.None, remotePoint);
             }

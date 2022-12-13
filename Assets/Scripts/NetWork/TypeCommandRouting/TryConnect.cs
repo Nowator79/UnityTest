@@ -14,6 +14,7 @@ public class TryConnect : BaseCommand
 
         Scripts.Modules.NetWork.NetWorkSend client = new Scripts.Modules.NetWork.NetWorkSend();
         client.SetEndPoint(ipAddress, NetWorkMB.PortServer);
+        client.UdpConnect();
         NetWorkMB.StaticNetWorkMB.UdpListClients.Add(client);
 
         CommandTemplate commandTemplate = new()
