@@ -166,12 +166,18 @@ namespace Scripts
         }
         public async Task SyncPosition()
         {
-            foreach (NetWorkSend player in UdpListClients)
-            {
-                CommandTemplate command = new() { TypeCommandStr = "MoveObjectWorldObject" };
-                command.SetJsonBody(GameWorld.StaticGameWorld.GetWorld()); ;
-                player.UdpSend(command.ToString());
-            }
+            await Task.Run( () => {
+                while (true)
+                {
+                    foreach (NetWorkSend player in UdpListClients)
+                    {
+                        CommandTemplate command = new() { TypeCommandStr = "MoveObjectWorldObject" };
+                        command.SetJsonBody(GameWorld.StaticGameWorld.GetWorld()); ;
+                        player.UdpSend(command.ToString());
+                    }
+                }
+            });
+
         }
     }
 }
