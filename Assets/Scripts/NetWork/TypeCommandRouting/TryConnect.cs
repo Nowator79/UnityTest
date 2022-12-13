@@ -1,8 +1,9 @@
 using NetWork.TypeJsonBody;
+using Scripts;
 
 public class TryConnect : BaseCommand
 {
-    public override string Start(CommandTemplate command)
+    public override string Start(CommandTemplate command, string ipAddress)
     {
 
         
@@ -10,6 +11,10 @@ public class TryConnect : BaseCommand
         Unit player = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
         NetWorkPlayers.StaticNetWorkPlayers.Add(name);
         UIDebug.Log($"Player connected {name}");
+
+        Scripts.Modules.NetWork.NetWorkSend client = new Scripts.Modules.NetWork.NetWorkSend();
+        client.SetEndPoint(ipAddress, NetWorkMB.PortServer);
+        NetWorkMB.StaticNetWorkMB.UdpListClients.Add(client);
 
         CommandTemplate commandTemplate = new()
         {

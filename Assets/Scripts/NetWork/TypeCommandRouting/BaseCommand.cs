@@ -1,12 +1,13 @@
 
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class BaseCommand
 {
     public static Dictionary<string, BaseCommand> Commands = new();
     public string Name { get; set; } = "";
-    public virtual string Start(CommandTemplate command)
+    public virtual string Start(CommandTemplate command, string ipAddress)
     {
         UIDebug.Log("Обработчик не реализован");
         return "Base";

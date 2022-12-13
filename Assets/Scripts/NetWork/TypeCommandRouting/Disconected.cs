@@ -2,7 +2,7 @@ using Scripts;
 
 public class Disconected : BaseCommand
 {
-    public override string Start(CommandTemplate command)
+    public override string Start(CommandTemplate command, string ipAddress)
     {
         string result = "";
         NetWorkPlayers.StaticNetWorkPlayers.RemoveByName(command.UserName);

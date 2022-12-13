@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace NetWork.TypeJsonBody
 {
     public struct Vector3D
@@ -18,6 +16,14 @@ namespace NetWork.TypeJsonBody
             X = vector.x;
             Y = vector.y;
             Z = vector.z;
+        }
+        public UnityEngine.Vector3 GetVector3()
+        {
+            return new UnityEngine.Vector3(X, Y, Z);
+        }
+        public UnityEngine.Quaternion GetQuaternion()
+        {
+            return UnityEngine.Quaternion.Euler(GetVector3());
         }
     }
 }

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -8,13 +9,16 @@ namespace Scripts
     public class NetWorkMB : MonoBehaviour
     {
         public static bool IsClient = true;
-        private const int PortServer = 3002;
+        public const int PortServer = 3002;
         public Task connectListenTcp;
         public Task tcpListenMessage;
+        public Task udpClientListenMessage;
+        public Task syncPosition;
         private bool ServerIsStart = false;
         public ClientStatus ClientStatus = new();
         private NetWorkSend addressServer;
         public static NetWorkMB StaticNetWorkMB;
+        public List<NetWorkSend> UdpListClients = new();
         private NetWorkMB()
         {
             StaticNetWorkMB = this;
@@ -33,6 +37,8 @@ namespace Scripts
                 await SendRequst("GetOnline", true);
                 await SendRequst("GetWorldObject", true);
                 GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
+                udpClientListenMessage = ListenUdp(Port);
+
             }
             else
             {
@@ -54,6 +60,7 @@ namespace Scripts
             gameStatus.StartGameServer();
             UIDebug.Log("Start server");
             NetWorkPlayers.StaticNetWorkPlayers.Add(GameStatus.StaticGameStatus.PlayerName);
+            syncPosition = SyncPosition();
         }
         private void Listen(int port)
         {
@@ -68,7 +75,7 @@ namespace Scripts
             while (true)
             {
                 string command = await NetWorkGet.UdpGetMessage();
-                //CommandRout(command, "udp");
+                CommendRouting.CommandRout(command, "udp", "");
             }
         }
         private async Task ListenTcp(int port)
@@ -77,10 +84,11 @@ namespace Scripts
 
             while (true)
             {
+
                 tcpListenMessage = NetWorkGet.TcpListenMessage(
-                    (string responce, NetWorkGet.StringResult result) =>
+                    (string responce, NetWorkGet.StringResult result, string ipAddress) =>
                     {
-                        result.str = CommendRouting.CommandRout(responce, "tcp");
+                        result.str = CommendRouting.CommandRout(responce, "tcp", ipAddress);
                     }
                 );
                 await tcpListenMessage;
@@ -95,6 +103,7 @@ namespace Scripts
         {
             addressServer = new();
             addressServer.SetEndPoint(IPAddres, Port);
+
             await SendRequst("TryConnect", true);
 
             int WaitSecunds = 5;
@@ -120,7 +129,7 @@ namespace Scripts
         }
         public void SendCommand(NetWorkSend remoteServer, CommandTemplate typeCommand)
         {
-            UIDebug.Log(typeCommand.ToString());
+            Debug.Log(typeCommand.ToString());
             Task task = remoteServer.UdpSend(typeCommand.ToString());
         }
         public void SetNameToCommend(ref CommandTemplate command)
@@ -153,6 +162,15 @@ namespace Scripts
                 await addressServer.TcpRequst(
                   tryConnect.ToString()
               );
+            }
+        }
+        public async Task SyncPosition()
+        {
+            foreach (NetWorkSend player in UdpListClients)
+            {
+                CommandTemplate command = new() { TypeCommandStr = "MoveObjectWorldObject" };
+                command.SetJsonBody(GameWorld.StaticGameWorld.GetWorld()); ;
+                player.UdpSend(command.ToString());
             }
         }
     }

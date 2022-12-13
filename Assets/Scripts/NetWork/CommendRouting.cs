@@ -17,8 +17,9 @@ public static class CommendRouting
         BaseCommand.Inclde(new OnlineList()); 
         BaseCommand.Inclde(new GetWorldObject());   
         BaseCommand.Inclde(new SetWorldObject()); 
+        BaseCommand.Inclde(new MoveObjectWorldObject());
     }
-    public static string CommandRout(string command, string type)
+    public static string CommandRout(string command, string type, string ipAddress)
     {
         string result = "";
         try
@@ -33,12 +34,15 @@ public static class CommendRouting
             {
                 if (command.TypeCommandStr != "")
                 {
-                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command);
+                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
                 }
             }
             void udpRout(CommandTemplate command)
             {
-                UIDebug.Log($"Не удалось обработать комманду {command.TypeCommandStr}");
+                if (command.TypeCommandStr != "")
+                {
+                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
+                }
             }
         }
         catch (Exception e)

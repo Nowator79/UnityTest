@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Scripts.Modules
 {
@@ -64,14 +66,15 @@ namespace Scripts.Modules
                 tcpListener = new TcpListener(IPAddress.Any, port);
             }
          
-            public static async Task TcpListenMessage(Action<string, StringResult> responseHandler)
+            public static async Task TcpListenMessage(Action<string, StringResult, string> responseHandler)
             {
                 tcpListener.Start();
 
                 TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
-
+                string ipAddress = ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address.ToString();
                 NetworkStream stream = tcpClient.GetStream();
                 List<byte> response = new();
+
                 int bytesRead = 10;
                 while ((bytesRead = stream.ReadByte()) != '\n')
                 {
@@ -81,7 +84,7 @@ namespace Scripts.Modules
                 response.Clear();
                 string result = "";
                 StringResult stringResult = new StringResult(result);
-                responseHandler(request, stringResult);
+                responseHandler(request, stringResult, ipAddress);
                 stringResult.str += "\n";
                 await stream.WriteAsync(Encoding.UTF8.GetBytes(stringResult.str));
             }

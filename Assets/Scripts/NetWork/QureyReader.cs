@@ -19,7 +19,7 @@ public class QureyReader : MonoBehaviour
         while (results.Count > 0)
         {
             NetWorkResult result = results.Dequeue();
-            CommendRouting.CommandRout(result.Message, result.Type);
+            CommendRouting.CommandRout(result.Message, result.Type, "");
         }
     }
 }

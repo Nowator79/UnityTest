@@ -1,16 +1,15 @@
 using NetWork.TypeJsonBody;
-using UnityEngine;
 
 public class SetWorldObject : BaseCommand
 {
-    public override string Start(CommandTemplate command)
+    public override string Start(CommandTemplate command, string ipAddress)
     {
         World world = command.GetJsonBody<World>();
-        foreach (World.GameObject element in world.objects)
+        foreach (var element in world.objects)
         {
             Unit unit = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[element.IdType].CreateObject();
             unit.ID = element.Id;
-            unit.transform.SetPositionAndRotation(new(element.Position.X, element.Position.Y, element.Position.Z), Quaternion.Euler(new(element.Rotation.X, element.Rotation.Y, element.Rotation.Z)));
+            unit.transform.SetPositionAndRotation(element.Position.GetVector3(), element.Rotation.GetQuaternion());
         }
         return "";
     }

@@ -2,7 +2,7 @@ using NetWork.TypeJsonBody;
 
 public class GetOnline : BaseCommand
 {
-    public override string Start(CommandTemplate command)
+    public override string Start(CommandTemplate command, string ipAddress)
     {
         CommandTemplate resultCommand = new() { TypeCommandStr = "OnlineList" };
         NetWork.TypeJsonBody.PlayersListOnline playersList = new();
