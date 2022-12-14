@@ -61,7 +61,7 @@ namespace Scripts
             gameStatus.StartGameServer();
             UIDebug.Log("Start server");
             NetWorkPlayers.StaticNetWorkPlayers.Add(GameStatus.StaticGameStatus.PlayerName);
-            InvokeRepeating(nameof(SyncPositionInvoke), 0, 1);
+            InvokeRepeating(nameof(SyncPositionInvoke), 0, 0.1f);
         }
         private void Listen(int port)
         {
