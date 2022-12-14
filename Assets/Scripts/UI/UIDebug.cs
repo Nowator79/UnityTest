@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class UIDebug : MonoBehaviour
@@ -24,6 +26,11 @@ public class UIDebug : MonoBehaviour
         {
             string result = logs.Dequeue();
             _UIDebug.LogText.text += result + "\n";
+        }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            UIDebug.Log(JsonConvert.SerializeObject(GameWorld.StaticGameWorld.GetWorld()));
+            UIDebug.Log(JsonConvert.SerializeObject(GameWorld.StaticGameWorld.GetWorld()).Length.ToString());
         }
     }
 

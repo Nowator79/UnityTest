@@ -1,3 +1,5 @@
+using System;
+
 namespace NetWork.TypeJsonBody
 {
     public struct Vector3D
@@ -13,9 +15,9 @@ namespace NetWork.TypeJsonBody
         }
         public Vector3D(UnityEngine.Vector3 vector)
         {
-            X = vector.x;
-            Y = vector.y;
-            Z = vector.z;
+            X = (float)Math.Round(Convert.ToDouble(vector.x), 3);
+            Y = (float)Math.Round(Convert.ToDouble(vector.y), 3);
+            Z = (float)Math.Round(Convert.ToDouble(vector.z), 3);
         }
         public UnityEngine.Vector3 GetVector3()
         {

@@ -78,7 +78,6 @@ namespace Scripts
                 while (true)
                 {
                     string command = await NetWorkGet.UdpGetMessage();
-                    Debug.Log(command);
                     CommendRouting.CommandRout(command, "udp", "");
                 }
             }
@@ -187,7 +186,8 @@ namespace Scripts
                         CommandTemplate command = new() { TypeCommandStr = "MoveWorldObject" };
                         command.SetJsonBody(element);
                         Debug.Log(command.ToString().Length * sizeof(char));
-                        Debug.Log(JsonConvert.SerializeObject(command.GetJsonBody<NetWork.TypeJsonBody.GameObject>()).Length * sizeof(char));
+                        Debug.Log(JsonConvert.SerializeObject(command.GetJsonBody<NetWork.TypeJsonBody.GameObject>()));
+
                         player.UdpSend(command.ToString());
                     }
                     catch (System.Exception e)
