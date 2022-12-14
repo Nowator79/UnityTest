@@ -8,6 +8,7 @@ public class GameStatus : MonoBehaviour
     private GameWorld GameWorld;
     public string PlayerName = "";
     public int PlayerId;
+    public bool IsServer { get; private set; } = false;
     private void Start()
     {
         GameWorld = GetComponent<GameWorld>();
@@ -18,7 +19,14 @@ public class GameStatus : MonoBehaviour
     public bool IsGameing { get { return isGameing; } }
     public void StartGameServer() {
         GameWorld.InintGameWorld();
-        isGameing = true; 
+        isGameing = true;
+        IsServer = true;
+    }
+    public void EndGameSever()
+    {
+        isGameing = false;
+        IsServer = false;
+
     }
 
     public static GameStatus StaticGameStatus;

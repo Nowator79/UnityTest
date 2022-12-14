@@ -20,13 +20,16 @@ public class Player : Unit
     }
     private void Update()
     {
-        if (IsControl)
+        if (GameStatus.StaticGameStatus.IsServer)
         {
-            Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Input.GetKeyDown(KeyCode.Space));
-        }
-        else
-        {
-            Move();
+            if (IsControl)
+            {
+                Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Input.GetKeyDown(KeyCode.Space));
+            }
+            else
+            {
+                Move();
+            }
         }
     }
     private void Move(float horizontal = 0, float vertical = 0, bool jump = false)
