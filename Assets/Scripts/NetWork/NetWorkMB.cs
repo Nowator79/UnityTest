@@ -79,7 +79,7 @@ namespace Scripts
                 {
                     string command = await NetWorkGet.UdpGetMessage();
                     Debug.Log(command);
-                    //CommendRouting.CommandRout(command, "udp", "");
+                    CommendRouting.CommandRout(command, "udp", "");
                 }
             }
             catch (System.Exception e)
