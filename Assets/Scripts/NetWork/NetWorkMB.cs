@@ -1,3 +1,4 @@
+using NetWork.TypeJsonBody;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -70,13 +71,22 @@ namespace Scripts
         }
         private async Task ListenUdp(int port)
         {
-            NetWorkGet.UdpOpenPort(port);
-
-            while (true)
+            try
             {
-                string command = await NetWorkGet.UdpGetMessage();
-                CommendRouting.CommandRout(command, "udp", "");
+                NetWorkGet.UdpOpenPort(port);
+
+                while (true)
+                {
+                    string command = await NetWorkGet.UdpGetMessage();
+                    Debug.Log(command);
+                    //CommendRouting.CommandRout(command, "udp", "");
+                }
             }
+            catch (System.Exception e)
+            {
+                Debug.LogException(e);
+            }
+
         }
         private async Task ListenTcp(int port)
         {
@@ -164,27 +174,26 @@ namespace Scripts
               );
             }
         }
-        public void SyncPosition()
-        {
-            
-          
-
-        }
         public void SyncPositionInvoke()
         {
             Debug.Log("invoke");
             foreach (NetWorkSend player in UdpListClients)
             {
-                try
+                World world = GameWorld.StaticGameWorld.GetWorld();
+                foreach (NetWork.TypeJsonBody.GameObject element in world.objects)
                 {
-                    CommandTemplate command = new() { TypeCommandStr = "MoveObjectWorldObject" };
-                    command.SetJsonBody(GameWorld.StaticGameWorld.GetWorld());
-                    Debug.Log(command.ToString());
-                    player.UdpSend(command.ToString());
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogException(e);
+                    try
+                    {
+                        CommandTemplate command = new() { TypeCommandStr = "MoveWorldObject" };
+                        command.SetJsonBody(element);
+                        Debug.Log(command.ToString().Length * sizeof(char));
+                        Debug.Log(JsonConvert.SerializeObject(command.GetJsonBody<NetWork.TypeJsonBody.GameObject>()).Length * sizeof(char));
+                        player.UdpSend(command.ToString());
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
                 }
             }
         }

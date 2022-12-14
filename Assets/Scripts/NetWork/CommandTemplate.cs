@@ -17,11 +17,11 @@ public struct CommandTemplate
     public static CommandTemplate PingCommand { get => new() { TypeCommandStr = "ping" }; }
     public void SetJsonBody<Type>(Type jsonBody)
     {
-        JsonBody = Coding(JsonConvert.SerializeObject(jsonBody));
+        JsonBody = (JsonConvert.SerializeObject(jsonBody));
     }
     public T GetJsonBody<T>()
     {
-        return JsonConvert.DeserializeObject<T>(Coding(JsonBody));
+        return JsonConvert.DeserializeObject<T>((JsonBody));
     }
     private static string Coding(string json)
     {

@@ -17,7 +17,7 @@ public static class CommendRouting
         BaseCommand.Inclde(new OnlineList()); 
         BaseCommand.Inclde(new GetWorldObject());   
         BaseCommand.Inclde(new SetWorldObject()); 
-        BaseCommand.Inclde(new MoveObjectWorldObject());
+        BaseCommand.Inclde(new MoveWorldObject());
     }
     public static string CommandRout(string command, string type, string ipAddress)
     {

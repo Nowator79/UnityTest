@@ -1,6 +1,6 @@
 using NetWork.TypeJsonBody;
 
-public class MoveObjectWorldObject : BaseCommand
+public class MoveWorldObject : BaseCommand
 {
     public override string Start(CommandTemplate command, string ipAddress)
     {
