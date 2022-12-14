@@ -1261,7 +1261,7 @@ MonoBehaviour:
   InputPlayerName: {fileID: 42735613}
   NetWork: {fileID: 618673632}
   IPDefult: 192.168.0.12
-  PortDefult: 3002
+  PortDefult: 5025
 --- !u!1 &409853445
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,6 +2381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerName: 
+  PlayerId: 0
 --- !u!114 &1164671630
 MonoBehaviour:
   m_ObjectHideFlags: 0
