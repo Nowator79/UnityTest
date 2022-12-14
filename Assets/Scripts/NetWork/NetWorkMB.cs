@@ -78,6 +78,7 @@ namespace Scripts
                 while (true)
                 {
                     string command = await NetWorkGet.UdpGetMessage();
+                    Debug.Log(command);
                     CommendRouting.CommandRout(command, "udp", "");
                 }
             }
