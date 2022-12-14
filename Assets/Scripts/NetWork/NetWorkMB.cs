@@ -78,7 +78,6 @@ namespace Scripts
                 while (true)
                 {
                     string command = await NetWorkGet.UdpGetMessage();
-                    Debug.Log(command);
                     CommendRouting.CommandRout(command, "udp", "");
                 }
             }
@@ -140,11 +139,12 @@ namespace Scripts
         public void SendCommand(NetWorkSend remoteServer, CommandTemplate typeCommand)
         {
             Debug.Log(typeCommand.ToString());
-            Task task = remoteServer.UdpSend(typeCommand.ToString());
+            remoteServer.UdpSend(typeCommand.ToString());
         }
         public void SetNameToCommend(ref CommandTemplate command)
         {
             command.UserName = GameStatus.StaticGameStatus.PlayerName;
+            command.Id = GameStatus.StaticGameStatus.PlayerId;
         }
         public async Task SendRequst(string TypeCommand, bool responce = false)
         {
@@ -174,7 +174,18 @@ namespace Scripts
               );
             }
         }
-        public void SyncPositionInvoke()
+        /// <summary>
+        /// Посылает команду серверу
+        /// </summary>
+        /// <param name="TypeCommand"></param>
+        /// <param name="responce"></param>
+        /// <returns></returns>
+        public Task SendRequst(CommandTemplate TypeCommand, bool responce = false)
+        {
+            return SendRequst(TypeCommand.ToString(), responce);
+        }
+
+        private void SyncPositionInvoke()
         {
             Debug.Log("invoke");
             foreach (NetWorkSend player in UdpListClients)

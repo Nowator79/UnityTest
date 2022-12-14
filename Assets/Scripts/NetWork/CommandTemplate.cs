@@ -5,10 +5,15 @@ using System.Text;
 [Serializable]
 public struct CommandTemplate
 {
-    public string TypeCommandStr;
-    public string CustomStrData;
-    public string UserName;
-    public string JsonBody;
+    public string TypeCommandStr { get; set; }
+    public int Id { get; set; }
+    public string UserName { get; set; }
+    public string JsonBody { get; set; }
+
+    public CommandTemplate(string typeCommandStr) : this()
+    {
+        TypeCommandStr = typeCommandStr;
+    }
 
     public override string ToString()
     {

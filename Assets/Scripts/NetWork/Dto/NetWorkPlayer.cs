@@ -5,7 +5,7 @@ using UnityEngine;
 public class NetWorkPlayer
 {
     private static int lastId = 0;
-    public int Id;
+    public int Id { get; private set; }
     public string Name;
 
     public NetWorkPlayer(string name)

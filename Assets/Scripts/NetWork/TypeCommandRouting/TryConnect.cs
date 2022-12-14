@@ -12,7 +12,7 @@ public class TryConnect : BaseCommand
         NetWorkPlayers.StaticNetWorkPlayers.Add(name);
         UIDebug.Log($"Player connected {name}");
 
-        Scripts.Modules.NetWork.NetWorkSend client = new Scripts.Modules.NetWork.NetWorkSend();
+        Scripts.Modules.NetWork.NetWorkSend client = new();
         client.SetEndPoint(ipAddress, NetWorkMB.PortServer);
         client.UdpConnect();
         NetWorkMB.StaticNetWorkMB.UdpListClients.Add(client);

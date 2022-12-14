@@ -126,9 +126,8 @@ namespace Scripts.Modules
             {
                 udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             }
-            public async Task UdpSend(string message)
+            public async void UdpSend(string message)
             {
-                Debug.Log($"send: udp,  remotePoint: {ip}");
                 byte[] data = Encoding.UTF8.GetBytes(message);
                 int bytes = await udpSocket.SendToAsync(data, SocketFlags.None, remotePoint);
             }
