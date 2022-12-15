@@ -28,6 +28,17 @@ public class GameStatus : MonoBehaviour
         IsServer = false;
 
     }
+    public void StartGameClient()
+    {
+        isGameing = true;
+        IsServer = false;
+    }
+    public void EndGameClient()
+    {
+        isGameing = false;
+        IsServer = false;
+    }
+
 
     public static GameStatus StaticGameStatus;
     private GameStatus() { StaticGameStatus = this; }

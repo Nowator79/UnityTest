@@ -39,7 +39,7 @@ namespace Scripts
                 await SendRequst("GetWorldObject", true);
                 GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
                 udpClientListenMessage = ListenUdp(Port);
-
+                GameStatus.StaticGameStatus.StartGameClient();
             }
             else
             {
