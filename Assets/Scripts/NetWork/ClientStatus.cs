@@ -25,4 +25,10 @@ public class ClientStatus
         IsDisconnect = true;
         IsWait = false;
     }
+    public void Disconect()
+    {
+        IsConnect = false;
+        IsDisconnect = true;
+        IsWait = false;
+    }
 }

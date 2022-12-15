@@ -10,13 +10,13 @@ public class GameWorld : MonoBehaviour
     {
         StaticGameWorld = this;
     }
-    public List<Unit> UnitsList = new();
+    public List<Unit> UnitsList { get; set; } = new();
     public void InintGameWorld()
     {
         Player player = (Player)DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
         player.SetControl();
     }
-    public void Destroy()
+    public void Clear()
     {
         foreach (Unit unit in UnitsList)
         {
@@ -25,11 +25,10 @@ public class GameWorld : MonoBehaviour
         UnitsList.Clear();
         CameraMove.StaticCameraMove.SetTarget(gameObject.transform);
     }
-    public Unit FindUnitById(int Id)
+    public Unit FindUnitById(int id)
     {
-        return UnitsList.Where(p => p.ID == Id).FirstOrDefault();
+        return UnitsList.Where(p => p.ID == id).FirstOrDefault();
     }
-    
     public World GetWorld() 
     {
         List<NetWork.TypeJsonBody.GameObject> objects = new();
@@ -40,5 +39,11 @@ public class GameWorld : MonoBehaviour
         }
         World world = new(objects);
         return world;
+    }
+    public void RemoveById(int id)
+    {
+        Unit removedUnit = FindUnitById(id);
+        UnitsList.Remove(removedUnit);
+        Destroy(removedUnit);
     }
 }

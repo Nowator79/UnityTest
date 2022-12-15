@@ -16,7 +16,7 @@ namespace Scripts
         public Task udpClientListenMessage;
         public Task syncPosition;
         private bool ServerIsStart = false;
-        public ClientStatus ClientStatus = new();
+        public ClientStatus ClientStatus { get; set; } = new();
         private NetWorkSend addressServer;
         public static NetWorkMB StaticNetWorkMB;
         public List<NetWorkSend> UdpListClients { get; set; } = new();
@@ -51,7 +51,8 @@ namespace Scripts
             ServerIsStart = false;
             NetWorkGet.Disconected();
             await SendRequst(new("Disconected"));
-            GameWorld.StaticGameWorld.Destroy();
+            GameWorld.StaticGameWorld.Clear();
+            GameStatus.StaticGameStatus.EndGameClient();
         }
         public void StartServer()
         {
@@ -66,7 +67,6 @@ namespace Scripts
         private void Listen(int port)
         {
             ServerIsStart = true;
-            //Task listenUdp = ListenUdp(port);
             connectListenTcp = ListenTcp(port);
         }
         private async Task ListenUdp(int port)
@@ -78,6 +78,10 @@ namespace Scripts
                 while (true)
                 {
                     string command = await NetWorkGet.UdpGetMessage();
+                    if (!GameStatus.StaticGameStatus.IsOnlineClietn())
+                    {
+                        break;
+                    }
                     CommendRouting.CommandRout(command, "udp", "");
                 }
             }
@@ -85,6 +89,7 @@ namespace Scripts
             {
                 Debug.LogException(e);
             }
+            UIDebug.Log("Прослушивание udp закончено");
 
         }
         private async Task ListenTcp(int port)

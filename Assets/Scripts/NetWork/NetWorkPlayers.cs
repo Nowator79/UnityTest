@@ -27,4 +27,9 @@ public class NetWorkPlayers : MonoBehaviour
             UINetWorkStats.StaticUINetWorkStats.Add(element.Value);
         }
     }
+    public void Clear()
+    {
+        UINetWorkStats.StaticUINetWorkStats.RemoveAll();
+        PlayersList = new();
+    }
 }

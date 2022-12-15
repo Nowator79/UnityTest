@@ -6,7 +6,7 @@ public class Disconected : BaseCommand
     {
         string result = "";
         NetWorkPlayers.StaticNetWorkPlayers.RemoveByName(command.UserName);
-        UIDebug.Log(NetWorkPlayers.StaticNetWorkPlayers.GetType().Name);
+        GameWorld.StaticGameWorld.RemoveById(command.Id);
         UIDebug.Log($"Disconect: {command.UserName}");
         return result;
     }
