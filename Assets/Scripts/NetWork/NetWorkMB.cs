@@ -1,5 +1,4 @@
 using NetWork.TypeJsonBody;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -11,10 +10,9 @@ namespace Scripts
     {
         public static bool IsClient = true;
         public const int PortServer = 5025;
-        public Task connectListenTcp;
-        public Task tcpListenMessage;
-        public Task udpClientListenMessage;
-        public Task syncPosition;
+        public Task connectListenTcp { get; set; }
+        public Task tcpListenMessage { get; set; }
+        public Task udpClientListenMessage { get; set; }
         private bool ServerIsStart = false;
         public ClientStatus ClientStatus { get; set; } = new();
         private NetWorkSend addressServer;
@@ -52,7 +50,9 @@ namespace Scripts
             NetWorkGet.Disconected();
             await SendRequst(new("Disconected"));
             GameWorld.StaticGameWorld.Clear();
+            NetWorkPlayers.StaticNetWorkPlayers.Clear();
             GameStatus.StaticGameStatus.EndGameClient();
+            NetWorkGet.UdpClosePort();
         }
         public void StartServer()
         {

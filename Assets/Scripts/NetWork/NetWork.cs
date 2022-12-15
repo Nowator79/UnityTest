@@ -49,14 +49,27 @@ namespace Scripts.Modules
                 remoteIp = new IPEndPoint(IPAddress.Any, 0);
                 return localIp.Address.ToString();
             }
+            public static void UdpClosePort()
+            {
+                udpSocket.Close();
+                udpSocket = null;
+            }
             public static async Task<string> UdpGetMessage()
             {
                 byte[] buffer = new byte[256];
 
                 while (true)
                 {
-                    var result = await udpSocket.ReceiveFromAsync(buffer, SocketFlags.None, remoteIp);
-                    string message = Encoding.UTF8.GetString(buffer, 0, result.ReceivedBytes);
+                    string message = "";
+                    if (udpSocket != null)
+                    {
+                        try
+                        {
+                            var result = await udpSocket.ReceiveFromAsync(buffer, SocketFlags.None, remoteIp);
+                            message = Encoding.UTF8.GetString(buffer, 0, result.ReceivedBytes);
+                        }
+                        catch(Exception e) { }
+                    }
                     return message;
                 }
             }
