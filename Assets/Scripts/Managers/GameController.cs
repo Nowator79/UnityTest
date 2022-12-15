@@ -1,4 +1,5 @@
 using Scripts;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -18,12 +19,10 @@ public class GameController : MonoBehaviour
             if (Input.GetKeyDown(btn))
             {
                 Send(btn, true);
-                Debug.Log($"Down {btn}");
             }
             else if(Input.GetKeyUp(btn))
             {
                 Send(btn, false);
-                Debug.Log($"Up {btn}");
             }
         }
 
@@ -32,7 +31,7 @@ public class GameController : MonoBehaviour
             ButtonNetWork btnNetWork = new(btn, isDown);
             CommandTemplate command = new("ButtonDownUp");
             command.SetJsonBody(btnNetWork);
-            NetWorkMB.StaticNetWorkMB.SendRequst(command);
+            Task send = NetWorkMB.StaticNetWorkMB.SendRequst(command);
         }
     }
 }

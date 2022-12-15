@@ -35,8 +35,8 @@ namespace Scripts
             if (SuccessfulConnect)
             {
                 UIDebug.Log($"Succesful connect to {IPAddres}:{Port}");
-                await SendRequst("GetOnline", true);
-                await SendRequst("GetWorldObject", true);
+                await SendRequst(new("GetOnline"), true);
+                await SendRequst(new("GetWorldObject"), true);
                 GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
                 udpClientListenMessage = ListenUdp(Port);
                 GameStatus.StaticGameStatus.StartGameClient();
@@ -50,7 +50,7 @@ namespace Scripts
         {
             ServerIsStart = false;
             NetWorkGet.Disconected();
-            await SendRequst("Disconected");
+            await SendRequst(new("Disconected"));
             GameWorld.StaticGameWorld.Destroy();
         }
         public void StartServer()
@@ -113,7 +113,7 @@ namespace Scripts
             addressServer = new();
             addressServer.SetEndPoint(IPAddres, Port);
 
-            await SendRequst("TryConnect", true);
+            await SendRequst(new("TryConnect"), true);
 
             int WaitSecunds = 5;
             for (int i = 0; i < WaitSecunds; i++)
@@ -146,19 +146,15 @@ namespace Scripts
             command.UserName = GameStatus.StaticGameStatus.PlayerName;
             command.Id = GameStatus.StaticGameStatus.PlayerId;
         }
-        public async Task SendRequst(string TypeCommand, bool responce = false)
+        public async Task SendRequst(CommandTemplate Command, bool responce = false)
         {
-            CommandTemplate tryConnect = new()
-            {
-                TypeCommandStr = TypeCommand,
-            };
 
-            SetNameToCommend(ref tryConnect);
+            SetNameToCommend(ref Command);
 
             if (responce)
             {
                 await addressServer.TcpRequst(
-                    tryConnect.ToString(),
+                    Command.ToString(),
                     (result) =>
                     {
                         NetWorkResult netWorkResult = new(result);
@@ -170,21 +166,10 @@ namespace Scripts
             else
             {
                 await addressServer.TcpRequst(
-                  tryConnect.ToString()
+                  Command.ToString()
               );
             }
         }
-        /// <summary>
-        /// Посылает команду серверу
-        /// </summary>
-        /// <param name="TypeCommand"></param>
-        /// <param name="responce"></param>
-        /// <returns></returns>
-        public Task SendRequst(CommandTemplate TypeCommand, bool responce = false)
-        {
-            return SendRequst(TypeCommand.TypeCommandStr, responce);
-        }
-
         private void SyncPositionInvoke()
         {
             foreach (NetWorkSend player in UdpListClients)
