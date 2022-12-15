@@ -40,7 +40,7 @@ public class Player : Unit
                 if (A) Horizontal--;
                 if (W) Vertical++;
                 if (S) Vertical--;
-                Move(Horizontal, Vertical, false);
+                Move(Horizontal, Vertical, Space);
             }
         }
     }
