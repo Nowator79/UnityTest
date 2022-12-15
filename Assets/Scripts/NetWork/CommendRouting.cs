@@ -18,32 +18,16 @@ public static class CommendRouting
         BaseCommand.Inclde(new GetWorldObject());   
         BaseCommand.Inclde(new SetWorldObject()); 
         BaseCommand.Inclde(new MoveWorldObject());
+        BaseCommand.Inclde(new ButtonDownUp());
     }
     public static string CommandRout(string command, string type, string ipAddress)
     {
         string result = "";
+        command = command.Replace("\\", "");
+        CommandTemplate myObject = new();
         try
         {
-            CommandTemplate myObject = JsonConvert.DeserializeObject<CommandTemplate>(command);
-            switch (type)
-            {
-                case "tcp": tcpRout(myObject); break;
-                case "udp": udpRout(myObject); break;
-            }
-            void tcpRout(CommandTemplate command)
-            {
-                if (command.TypeCommandStr != "")
-                {
-                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
-                }
-            }
-            void udpRout(CommandTemplate command)
-            {
-                if (command.TypeCommandStr != "")
-                {
-                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
-                }
-            }
+            myObject = JsonConvert.DeserializeObject<CommandTemplate>(command);
         }
         catch (Exception e)
         {
@@ -54,6 +38,27 @@ public static class CommendRouting
             Debug.LogError(e);
             UIDebug.Log($"Не удалось распарсить {command}");
         }
+        switch (type)
+            {
+                case "tcp": tcpRout(myObject); break;
+                case "udp": udpRout(myObject); break;
+            }
+            void tcpRout(CommandTemplate command)
+            {
+                if (myObject.TypeCommandStr != "")
+                {
+                    UIDebug.Log(myObject.TypeCommandStr);
+                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
+                }
+            }
+            void udpRout(CommandTemplate command)
+            {
+                if (command.TypeCommandStr != "")
+                {
+                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
+                }
+            }
+       
         return result;
     }
 }
