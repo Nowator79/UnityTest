@@ -34,4 +34,5 @@ public class GameController : MonoBehaviour
             Task send = NetWorkMB.StaticNetWorkMB.SendRequst(command);
         }
     }
+
 }

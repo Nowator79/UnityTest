@@ -18,6 +18,12 @@ public class Player : Unit
     {
         CharacterController = GetComponent<CharacterController>();
     }
+    [SerializeField]
+    private float Horizontal = 0;
+    [SerializeField]
+    private float Vertical = 0;
+    [SerializeField]
+    private bool W, A, S, D, Space;
     private void Update()
     {
         if (GameStatus.StaticGameStatus.IsServer)
@@ -28,7 +34,13 @@ public class Player : Unit
             }
             else
             {
-                Move();
+                Horizontal = 0;
+                Vertical = 0;
+                if (D) Horizontal++;
+                if (A) Horizontal--;
+                if (W) Vertical++;
+                if (S) Vertical--;
+                Move(Horizontal, Vertical, false);
             }
         }
     }
@@ -51,5 +63,26 @@ public class Player : Unit
     {
         IsControl = true;
         CameraMove.StaticCameraMove.SetTarget(transform);
+    }
+    public void ActiveButton(string btn, bool isClick)
+    {
+        switch (btn)
+        {
+            case "w":
+                W = isClick;
+                break;
+            case "a":
+                A = isClick;
+                break;
+            case "s":
+                S = isClick;
+                break;
+            case "d":
+                D = isClick;
+                break;
+            case "space":
+                Space = isClick;
+                break;
+        }
     }
 }
