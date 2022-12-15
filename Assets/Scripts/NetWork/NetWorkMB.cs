@@ -182,12 +182,11 @@ namespace Scripts
         /// <returns></returns>
         public Task SendRequst(CommandTemplate TypeCommand, bool responce = false)
         {
-            return SendRequst(TypeCommand.ToString(), responce);
+            return SendRequst(TypeCommand.TypeCommandStr, responce);
         }
 
         private void SyncPositionInvoke()
         {
-            Debug.Log("invoke");
             foreach (NetWorkSend player in UdpListClients)
             {
                 World world = GameWorld.StaticGameWorld.GetWorld();
@@ -197,9 +196,6 @@ namespace Scripts
                     {
                         CommandTemplate command = new() { TypeCommandStr = "MoveWorldObject" };
                         command.SetJsonBody(element);
-                        Debug.Log(command.ToString().Length * sizeof(char));
-                        Debug.Log(JsonConvert.SerializeObject(command.GetJsonBody<NetWork.TypeJsonBody.GameObject>()));
-
                         player.UdpSend(command.ToString());
                     }
                     catch (System.Exception e)

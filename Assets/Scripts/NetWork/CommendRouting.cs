@@ -23,7 +23,7 @@ public static class CommendRouting
     public static string CommandRout(string command, string type, string ipAddress)
     {
         string result = "";
-        command = command.Replace("\\", "");
+        Debug.Log(command);
         CommandTemplate myObject = new();
         try
         {
