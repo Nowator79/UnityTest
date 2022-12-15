@@ -23,7 +23,6 @@ public static class CommendRouting
     public static string CommandRout(string command, string type, string ipAddress)
     {
         string result = "";
-        Debug.Log(command);
         CommandTemplate myObject = new();
         try
         {
@@ -47,7 +46,6 @@ public static class CommendRouting
             {
                 if (myObject.TypeCommandStr != "")
                 {
-                    UIDebug.Log(myObject.TypeCommandStr);
                     result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
                 }
             }
