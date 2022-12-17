@@ -13,11 +13,9 @@ namespace Scripts
         public Task connectListenTcp { get; set; }
         public Task tcpListenMessage { get; set; }
         public Task udpClientListenMessage { get; set; }
-        private bool ServerIsStart = false;
         public ClientStatus ClientStatus { get; set; } = new();
         private NetWorkSend addressServer;
         public static NetWorkMB StaticNetWorkMB;
-        public List<NetWorkSend> UdpListClients { get; set; } = new();
         private NetWorkMB()
         {
             StaticNetWorkMB = this;
@@ -46,7 +44,6 @@ namespace Scripts
         }
         public async void Disconnect()
         {
-            ServerIsStart = false;
             NetWorkGet.Disconected();
             await SendRequst(new("Disconected"));
             GameWorld.StaticGameWorld.Clear();
@@ -61,12 +58,10 @@ namespace Scripts
             GameStatus gameStatus = GameStatus.StaticGameStatus;
             gameStatus.StartGameServer();
             UIDebug.Log("Start server");
-            NetWorkPlayers.StaticNetWorkPlayers.Add(GameStatus.StaticGameStatus.PlayerName);
             InvokeRepeating(nameof(SyncPositionInvoke), 0, 0.02f);
         }
         private void Listen(int port)
         {
-            ServerIsStart = true;
             connectListenTcp = ListenTcp(port);
         }
         private async Task ListenUdp(int port)
@@ -106,7 +101,7 @@ namespace Scripts
                     }
                 );
                 await tcpListenMessage;
-                if (!ServerIsStart)
+                if (!GameStatus.StaticGameStatus.IsServer)
                 {
                     UIDebug.Log("Close server");
                     break;
@@ -177,7 +172,7 @@ namespace Scripts
         }
         private void SyncPositionInvoke()
         {
-            foreach (NetWorkSend player in UdpListClients)
+            foreach (KeyValuePair<string, NetWorkPlayer> player in NetWorkPlayers.StaticNetWorkPlayers.PlayersList)
             {
                 World world = GameWorld.StaticGameWorld.GetWorld();
                 foreach (NetWork.TypeJsonBody.GameObject element in world.objects)
@@ -186,7 +181,7 @@ namespace Scripts
                     {
                         CommandTemplate command = new() { TypeCommandStr = "MoveWorldObject" };
                         command.SetJsonBody(element);
-                        player.UdpSend(command.ToString());
+                        player.Value.NetWorkSender.UdpSend(command.ToString());
                     }
                     catch (System.Exception e)
                     {

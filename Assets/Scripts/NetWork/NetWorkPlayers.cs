@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Scripts.Modules.NetWork;
 
 public class NetWorkPlayers : MonoBehaviour
 {
@@ -9,9 +10,9 @@ public class NetWorkPlayers : MonoBehaviour
         StaticNetWorkPlayers = this;
     }
     public Dictionary<string, NetWorkPlayer> PlayersList = new();
-    public void Add(string Name)
+    public void Add(string Name, NetWorkSend netWorkSend)
     {
-        PlayersList.Add(Name, new NetWorkPlayer(Name));
+        PlayersList.Add(Name, new NetWorkPlayer(Name, netWorkSend));
         UpdateUI();
     }
     public void RemoveByName(string Name)

@@ -44,6 +44,6 @@ public class GameWorld : MonoBehaviour
     {
         Unit removedUnit = FindUnitById(id);
         UnitsList.Remove(removedUnit);
-        Destroy(removedUnit);
+        Destroy(removedUnit.gameObject);
     }
 }

@@ -9,13 +9,13 @@ public class TryConnect : BaseCommand
         
         string name = command.UserName;
         Unit player = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
-        NetWorkPlayers.StaticNetWorkPlayers.Add(name);
         UIDebug.Log($"Player connected {name}");
 
         Scripts.Modules.NetWork.NetWorkSend client = new();
         client.SetEndPoint(ipAddress, NetWorkMB.PortServer);
         client.UdpConnect();
-        NetWorkMB.StaticNetWorkMB.UdpListClients.Add(client);
+        NetWorkPlayers.StaticNetWorkPlayers.Add(name, client);
+
 
         CommandTemplate commandTemplate = new()
         {
