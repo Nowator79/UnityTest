@@ -58,9 +58,9 @@ namespace Scripts.Modules
             {
                 byte[] buffer = new byte[256];
 
+                string message = "";
                 while (true)
                 {
-                    string message = "";
                     if (udpSocket != null)
                     {
                         try
@@ -68,10 +68,15 @@ namespace Scripts.Modules
                             var result = await udpSocket.ReceiveFromAsync(buffer, SocketFlags.None, remoteIp);
                             message = Encoding.UTF8.GetString(buffer, 0, result.ReceivedBytes);
                         }
-                        catch(Exception e) { Debug.Log(e); }
+                        catch
+                        {
+                            break;
+                        }
                     }
                     return message;
                 }
+                return message;
+
             }
 
             public static void TcpInitServer(int port)

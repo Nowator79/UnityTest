@@ -7,7 +7,7 @@ public class OnlineList : BaseCommand
         PlayersListOnline playersList = command.GetJsonBody<PlayersListOnline>();
         foreach (PlayersListOnline.Player player in playersList.PlayerList)
         {
-            NetWorkPlayers.StaticNetWorkPlayers.PlayersList.Add(player.Name, new NetWorkPlayer(player.Name));
+            NetWorkPlayers.StaticNetWorkPlayers.Add(player.Name);
         }
         return "";
     }
