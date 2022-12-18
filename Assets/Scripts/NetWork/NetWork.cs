@@ -68,7 +68,7 @@ namespace Scripts.Modules
                             var result = await udpSocket.ReceiveFromAsync(buffer, SocketFlags.None, remoteIp);
                             message = Encoding.UTF8.GetString(buffer, 0, result.ReceivedBytes);
                         }
-                        catch(Exception e) { }
+                        catch(Exception e) { Debug.Log(e); }
                     }
                     return message;
                 }
