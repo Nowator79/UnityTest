@@ -15,6 +15,7 @@ public class GameWorld : MonoBehaviour
     {
         Player player = (Player)DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
         player.SetControl();
+        NetWorkPlayers.StaticNetWorkPlayers.Add(GameStatus.StaticGameStatus.PlayerName);
     }
     public void Clear()
     {

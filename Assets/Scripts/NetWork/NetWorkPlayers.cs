@@ -10,7 +10,7 @@ public class NetWorkPlayers : MonoBehaviour
         StaticNetWorkPlayers = this;
     }
     public Dictionary<string, NetWorkPlayer> PlayersList = new();
-    public void Add(string Name, NetWorkSend netWorkSend)
+    public void Add(string Name, NetWorkSend netWorkSend = null)
     {
         PlayersList.Add(Name, new NetWorkPlayer(Name, netWorkSend));
         UpdateUI();

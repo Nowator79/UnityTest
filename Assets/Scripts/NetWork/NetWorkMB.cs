@@ -8,11 +8,11 @@ namespace Scripts
 {
     public class NetWorkMB : MonoBehaviour
     {
-        public static bool IsClient = true;
+        public static bool IsClient { get; set; } = true;
         public const int PortServer = 5025;
-        public Task connectListenTcp { get; set; }
-        public Task tcpListenMessage { get; set; }
-        public Task udpClientListenMessage { get; set; }
+        public Task ConnectListenTcp { get; set; }
+        public Task TcpListenMessage { get; set; }
+        public Task UdpClientListenMessage { get; set; }
         public ClientStatus ClientStatus { get; set; } = new();
         private NetWorkSend addressServer;
         public static NetWorkMB StaticNetWorkMB;
@@ -34,7 +34,7 @@ namespace Scripts
                 await SendRequst(new("GetOnline"), true);
                 await SendRequst(new("GetWorldObject"), true);
                 GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
-                udpClientListenMessage = ListenUdp(Port);
+                UdpClientListenMessage = ListenUdp(Port);
                 GameStatus.StaticGameStatus.StartGameClient();
             }
             else
@@ -62,7 +62,7 @@ namespace Scripts
         }
         private void Listen(int port)
         {
-            connectListenTcp = ListenTcp(port);
+            ConnectListenTcp = ListenTcp(port);
         }
         private async Task ListenUdp(int port)
         {
@@ -94,13 +94,13 @@ namespace Scripts
             while (true)
             {
 
-                tcpListenMessage = NetWorkGet.TcpListenMessage(
+                TcpListenMessage = NetWorkGet.TcpListenMessage(
                     (string responce, NetWorkGet.StringResult result, string ipAddress) =>
                     {
                         result.str = CommendRouting.CommandRout(responce, "tcp", ipAddress);
                     }
                 );
-                await tcpListenMessage;
+                await TcpListenMessage;
                 if (!GameStatus.StaticGameStatus.IsServer)
                 {
                     UIDebug.Log("Close server");
@@ -174,6 +174,10 @@ namespace Scripts
         {
             foreach (KeyValuePair<string, NetWorkPlayer> player in NetWorkPlayers.StaticNetWorkPlayers.PlayersList)
             {
+                if(player.Value.NetWorkSender == null)
+                {
+                    continue;
+                }
                 World world = GameWorld.StaticGameWorld.GetWorld();
                 foreach (NetWork.TypeJsonBody.GameObject element in world.objects)
                 {

@@ -1,4 +1,5 @@
 using NetWork.TypeJsonBody;
+using UnityEngine;
 
 public class GetOnline : BaseCommand
 {
@@ -16,6 +17,7 @@ public class GetOnline : BaseCommand
         }
 
         resultCommand.SetJsonBody(playersList);
+        Debug.Log(resultCommand.ToString());
         return resultCommand.ToString();
     }
 }
