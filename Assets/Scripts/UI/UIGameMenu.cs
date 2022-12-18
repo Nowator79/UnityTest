@@ -12,7 +12,7 @@ public class UIGameMenu : UIBase
     }
     public void Disconnect()
     {
-        StaticNetWorkMB.Disconnect();
+        StaticNetWorkMB.Exit();
         CanvasControler.StaticCanvasControler.mainMenu.Show();
     }
     private void Controller()

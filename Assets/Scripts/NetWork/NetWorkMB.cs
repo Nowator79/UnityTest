@@ -51,6 +51,21 @@ namespace Scripts
             GameStatus.StaticGameStatus.EndGameClient();
             NetWorkGet.UdpClosePort();
         }
+        public void ServerClose()
+        {
+            GameStatus.StaticGameStatus.EndGameSever();
+            GameWorld.StaticGameWorld.Clear();
+        }
+        public void Exit()
+        {
+            if(GameStatus.StaticGameStatus.IsOnlineClietn()){
+                Disconnect();
+            }
+            else
+            {
+                ServerClose();
+            }
+        }
         public void StartServer()
         {
             IsClient = false;

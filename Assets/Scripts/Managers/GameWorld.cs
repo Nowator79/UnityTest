@@ -25,6 +25,7 @@ public class GameWorld : MonoBehaviour
         }
         UnitsList.Clear();
         CameraMove.StaticCameraMove.SetTarget(gameObject.transform);
+        NetWorkPlayers.StaticNetWorkPlayers.Clear();
     }
     public Unit FindUnitById(int id)
     {
