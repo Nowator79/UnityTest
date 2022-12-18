@@ -1,6 +1,9 @@
 using NetWork.TypeJsonBody;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Scripts.Modules.NetWork;
 
@@ -11,7 +14,6 @@ namespace Scripts
         public static bool IsClient { get; set; } = true;
         public const int PortServer = 5025;
         public Task ConnectListenTcp { get; set; }
-        public Task TcpListenMessage { get; set; }
         public Task UdpClientListenMessage { get; set; }
         public ClientStatus ClientStatus { get; set; } = new();
         private NetWorkSend addressServer;
@@ -44,24 +46,29 @@ namespace Scripts
         }
         public async void Disconnect()
         {
-            NetWorkGet.Disconected();
             await SendRequst(new("Disconected"));
             GameWorld.StaticGameWorld.Clear();
             NetWorkPlayers.StaticNetWorkPlayers.Clear();
             GameStatus.StaticGameStatus.EndGameClient();
             NetWorkGet.UdpClosePort();
         }
-        public void ServerClose()
+        public async void ServerClose()
         {
+            CancelInvoke(nameof(SyncPositionInvoke));
             GameStatus.StaticGameStatus.EndGameSever();
             GameWorld.StaticGameWorld.Clear();
+            addressServer = new();
+            addressServer.SetEndPoint("127.0.0.1", PortServer);
+            await addressServer.TcpRequst(
+                CloseCommand
+            );
         }
         public void Exit()
         {
             if(GameStatus.StaticGameStatus.IsOnlineClietn()){
                 Disconnect();
             }
-            else
+            if(GameStatus.StaticGameStatus.IsServer)
             {
                 ServerClose();
             }
@@ -70,8 +77,7 @@ namespace Scripts
         {
             IsClient = false;
             Listen(PortServer);
-            GameStatus gameStatus = GameStatus.StaticGameStatus;
-            gameStatus.StartGameServer();
+            GameStatus.StaticGameStatus.StartGameServer();
             UIDebug.Log("Start server");
             InvokeRepeating(nameof(SyncPositionInvoke), 0, 0.02f);
         }
@@ -104,24 +110,32 @@ namespace Scripts
         }
         private async Task ListenTcp(int port)
         {
-            NetWorkGet.TcpInitServer(port);
-
-            while (true)
+            try
             {
 
-                TcpListenMessage = NetWorkGet.TcpListenMessage(
-                    (string responce, NetWorkGet.StringResult result, string ipAddress) =>
-                    {
-                        result.str = CommendRouting.CommandRout(responce, "tcp", ipAddress);
-                    }
-                );
-                await TcpListenMessage;
-                if (!GameStatus.StaticGameStatus.IsServer)
+                NetWorkGet.TcpInitServer(port);
+
+                while (true)
                 {
-                    UIDebug.Log("Close server");
-                    break;
+
+                    string result = await NetWorkGet.TcpListenMessage(
+                        (string responce, NetWorkGet.StringResult result, string ipAddress) =>
+                        {
+                            result.str = CommendRouting.CommandRout(responce, "tcp", ipAddress);
+                        }
+                    );
+                    if(result == CloseCommand)
+                    {
+                        UIDebug.Log("Close server");
+                        break;
+                    }
                 }
             }
+            catch(Exception e)
+            {
+                Debug.LogError(e);
+            }
+            NetWorkGet.TcpCloseServer();
         }
         private async Task<bool> Connect(string IPAddres, int Port)
         {

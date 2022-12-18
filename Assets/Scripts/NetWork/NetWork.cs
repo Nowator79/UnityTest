@@ -12,6 +12,7 @@ namespace Scripts.Modules
 {
     public class NetWork
     {
+        public const string CloseCommand = "CLOSE";
         public static class NetWorkGet
         {
             public static Socket udpSocket;
@@ -83,8 +84,12 @@ namespace Scripts.Modules
             {
                 tcpListener = new TcpListener(IPAddress.Any, port);
             }
-         
-            public static async Task TcpListenMessage(Action<string, StringResult, string> responseHandler)
+            public static void TcpCloseServer()
+            {
+                tcpListener.Stop();
+            }
+
+            public static async Task<string> TcpListenMessage(Action<string, StringResult, string> responseHandler)
             {
                 tcpListener.Start();
 
@@ -102,9 +107,14 @@ namespace Scripts.Modules
                 response.Clear();
                 string result = "";
                 StringResult stringResult = new StringResult(result);
+                if (request == CloseCommand)
+                {
+                    return request;
+                }
                 responseHandler(request, stringResult, ipAddress);
                 stringResult.str += "\n";
                 await stream.WriteAsync(Encoding.UTF8.GetBytes(stringResult.str));
+                return request;
             }
             public class StringResult
             {
@@ -114,16 +124,6 @@ namespace Scripts.Modules
                     this.str = str;
                 }
                      
-            }
-            public static void Disconected()
-            {
-                try
-                {
-                    tcpListener.Stop();
-                }
-                catch
-                {
-                }
             }
         }
         public class NetWorkSend
