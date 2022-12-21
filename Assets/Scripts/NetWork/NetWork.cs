@@ -16,9 +16,9 @@ namespace Scripts.Modules
         public static class NetWorkGet
         {
             public static Socket udpSocket;
+            public static Socket tcpSocketServer;
             public static IPEndPoint localIp;
             public static EndPoint remoteIp;
-            public static TcpListener tcpListener;
 
             public static string GetIP()
             {
@@ -58,7 +58,7 @@ namespace Scripts.Modules
             public static async Task<string> UdpGetMessage()
             {
                 byte[] buffer = new byte[256];
-
+                        
                 string message = "";
                 while (true)
                 {
@@ -66,7 +66,7 @@ namespace Scripts.Modules
                     {
                         try
                         {
-                            var result = await udpSocket.ReceiveFromAsync(buffer, SocketFlags.None, remoteIp);
+                            SocketReceiveFromResult result = await udpSocket.ReceiveFromAsync(buffer, SocketFlags.None, remoteIp);
                             message = Encoding.UTF8.GetString(buffer, 0, result.ReceivedBytes);
                         }
                         catch
@@ -82,39 +82,55 @@ namespace Scripts.Modules
 
             public static void TcpInitServer(int port)
             {
-                tcpListener = new TcpListener(IPAddress.Any, port);
+                tcpSocketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                tcpSocketServer.Bind(new IPEndPoint(IPAddress.Any, port));
             }
             public static void TcpCloseServer()
             {
-                tcpListener.Stop();
+                tcpSocketServer.Close();
             }
+           
 
-            public static async Task<string> TcpListenMessage(Action<string, StringResult, string> responseHandler)
+            public static async Task TcpListenMessage(Action<string, StringResult, string> responseHandler)
             {
-                tcpListener.Start();
+                tcpSocketServer.Listen(0);
 
-                TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
-                string ipAddress = ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address.ToString();
-                NetworkStream stream = tcpClient.GetStream();
-                List<byte> response = new();
+                while (true)
+                {
+                    Socket? tcpClient = await tcpSocketServer.AcceptAsync();
+                    _ = Task.Run(async () => await process(tcpClient, responseHandler));
+                }
 
-                int bytesRead = 10;
-                while ((bytesRead = stream.ReadByte()) != '\n')
+               
+              
+
+                static async Task process(Socket? tcpClient, Action<string, StringResult, string> responseHandler)
                 {
-                    response.Add((byte)bytesRead);
+                    string ipAddress = ((IPEndPoint)tcpClient.RemoteEndPoint).Address.ToString();
+                    List<byte> response = new();
+
+                    // буфер для считывания одного байта
+                    var bytesRead = new byte[1];
+                    // считываем данные до конечного символа
+                    while (true)
+                    {
+                        var count = await tcpClient.ReceiveAsync(bytesRead, SocketFlags.None);
+                        // смотрим, если считанный байт представляет конечный символ, выходим
+                        if (count == 0 || bytesRead[0] == '\n') break;
+                        // иначе добавляем в буфер
+                        response.Add(bytesRead[0]);
+                    }
+
+                    string request = Encoding.UTF8.GetString(response.ToArray());
+                    response.Clear();
+                    string result = "";
+                    StringResult stringResult = new(result);
+
+                    responseHandler(request, stringResult, ipAddress);
+                    stringResult.str += "\n";
+                    await tcpClient.SendAsync(Encoding.UTF8.GetBytes(stringResult.str), SocketFlags.None);
                 }
-                string request = Encoding.UTF8.GetString(response.ToArray());
-                response.Clear();
-                string result = "";
-                StringResult stringResult = new StringResult(result);
-                if (request == CloseCommand)
-                {
-                    return request;
-                }
-                responseHandler(request, stringResult, ipAddress);
-                stringResult.str += "\n";
-                await stream.WriteAsync(Encoding.UTF8.GetBytes(stringResult.str));
-                return request;
+
             }
             public class StringResult
             {

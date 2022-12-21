@@ -51,6 +51,7 @@ namespace Scripts
             NetWorkPlayers.StaticNetWorkPlayers.Clear();
             GameStatus.StaticGameStatus.EndGameClient();
             NetWorkGet.UdpClosePort();
+            addressServer = null;
         }
         public async void ServerClose()
         {
@@ -62,6 +63,8 @@ namespace Scripts
             await addressServer.TcpRequst(
                 CloseCommand
             );
+            addressServer = null;
+
         }
         public void Exit()
         {
@@ -118,17 +121,19 @@ namespace Scripts
                 while (true)
                 {
 
-                    string result = await NetWorkGet.TcpListenMessage(
+                    await NetWorkGet.TcpListenMessage(
                         (string responce, NetWorkGet.StringResult result, string ipAddress) =>
                         {
                             result.str = CommendRouting.CommandRout(responce, "tcp", ipAddress);
                         }
                     );
+                    /*
                     if(result == CloseCommand)
                     {
                         UIDebug.Log("Close server");
                         break;
                     }
+                    */
                 }
             }
             catch(Exception e)
