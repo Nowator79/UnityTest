@@ -26,7 +26,13 @@ namespace Scripts
         {
             CommendRouting.IncludeCommands();
         }
-    
+        /// <summary>
+        /// Главный поток
+        /// </summary>
+        private void Update()
+        {
+            BaseCommand.MainUpdate();
+        }
         public async void ConnectToServer(string IPAddres, int Port)
         {
             bool SuccessfulConnect = await Connect(IPAddres, Port);

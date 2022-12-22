@@ -14,9 +14,9 @@ public static class CommendRouting
         BaseCommand.Inclde(new Disconected());
         BaseCommand.Inclde(new ErrorRequst());
         BaseCommand.Inclde(new GetOnline());
-        BaseCommand.Inclde(new OnlineList()); 
-        BaseCommand.Inclde(new GetWorldObject());   
-        BaseCommand.Inclde(new SetWorldObject()); 
+        BaseCommand.Inclde(new OnlineList());
+        BaseCommand.Inclde(new GetWorldObject());
+        BaseCommand.Inclde(new SetWorldObject());
         BaseCommand.Inclde(new MoveWorldObject());
         BaseCommand.Inclde(new ButtonDownUp());
     }
@@ -34,29 +34,31 @@ public static class CommendRouting
             {
                 TypeCommandStr = "ErrorRequst",
             }.ToString();
-            Debug.LogError(e);
+            Debug.Log(e);
             UIDebug.Log($"Не удалось распарсить {command}");
         }
         switch (type)
+        {
+            case "tcp": tcpRout(myObject); break;
+            case "udp": udpRout(myObject); break;
+        }
+        void tcpRout(CommandTemplate command)
+        {
+            UIDebug.Log($"{myObject.TypeCommandStr}");
+
+            if (myObject.TypeCommandStr != "")
             {
-                case "tcp": tcpRout(myObject); break;
-                case "udp": udpRout(myObject); break;
+                result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).SetProcess(command, ipAddress);
             }
-            void tcpRout(CommandTemplate command)
+        }
+        void udpRout(CommandTemplate command)
+        {
+            if (command.TypeCommandStr != "")
             {
-                if (myObject.TypeCommandStr != "")
-                {
-                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
-                }
+                result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).SetProcess(command, ipAddress);
             }
-            void udpRout(CommandTemplate command)
-            {
-                if (command.TypeCommandStr != "")
-                {
-                    result = BaseCommand.Get(myObject.TypeCommandStr).Start(command, ipAddress);
-                }
-            }
-       
+        }
+
         return result;
     }
 }

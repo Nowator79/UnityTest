@@ -2,7 +2,7 @@ using NetWork.TypeJsonBody;
 
 public class MoveWorldObject : BaseCommand
 {
-    public override string Start(CommandTemplate command, string ipAddress)
+    public override void Process(CommandTemplate command, string ipAddress)
     {
         GameObject element = command.GetJsonBody<GameObject>();
         Unit unit = GameWorld.StaticGameWorld.FindUnitById(element.Id);
@@ -11,7 +11,6 @@ public class MoveWorldObject : BaseCommand
             unit.LastUpdate = element.UpdateTime;
             unit.transform.SetPositionAndRotation(element.Position.GetVector3(), element.Rotation.GetQuaternion());
         }
-        return "";
     }
 
 }

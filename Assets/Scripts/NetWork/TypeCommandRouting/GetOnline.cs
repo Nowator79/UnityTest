@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GetOnline : BaseCommand
 {
-    public override string Start(CommandTemplate command, string ipAddress)
+    public override void Process(CommandTemplate command, string ipAddress)
     {
         CommandTemplate resultCommand = new() { TypeCommandStr = "OnlineList" };
         NetWork.TypeJsonBody.PlayersListOnline playersList = new()
@@ -17,6 +17,5 @@ public class GetOnline : BaseCommand
         }
 
         resultCommand.SetJsonBody(playersList);
-        return resultCommand.ToString();
     }
 }

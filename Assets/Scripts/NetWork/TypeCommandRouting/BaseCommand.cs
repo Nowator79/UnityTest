@@ -1,16 +1,14 @@
 
 using System.Collections.Generic;
-using System.Net;
-using UnityEngine;
 
 public class BaseCommand
 {
     public static Dictionary<string, BaseCommand> Commands = new();
-    public string Name { get; set; } = "";
-    public virtual string Start(CommandTemplate command, string ipAddress)
+    private readonly Queue<Instruction> Tasks = new();
+
+    public virtual void Process(CommandTemplate command, string ipAddress)
     {
         UIDebug.Log("Обработчик не реализован");
-        return "Base";
     }
     public static bool Inclde(BaseCommand command)
     {
@@ -27,13 +25,43 @@ public class BaseCommand
         }
         return true;
     }
-    public static BaseCommand Get(string name)
+    public static BaseCommand FindCommandProcesser(string name)
     {
         BaseCommand tmp;
-        if(!Commands.TryGetValue(name, out tmp))
+        if (!Commands.TryGetValue(name, out tmp))
         {
             UIDebug.Log($"Не удалось обработать комманду type: {name}");
         }
         return tmp;
+    }
+    public static void MainUpdate()
+    {
+        foreach (var command in Commands)
+        {
+            command.Value.Update();
+        }
+    }
+    public void Update()
+    {
+        while (Tasks.Count > 0)
+        {
+            Instruction instruction = Tasks.Dequeue();
+            Process(instruction.Command, instruction.IP);
+        }
+    }
+    public virtual string SetProcess(CommandTemplate command, string ipAddress)
+    {
+        Tasks.Enqueue(new Instruction(command, ipAddress));
+        return "";
+    }
+    public class Instruction
+    {
+        public CommandTemplate Command { get; }
+        public string IP { get; }
+        public Instruction(CommandTemplate command, string ip)
+        {
+            Command = command;
+            IP = ip;
+        }
     }
 }

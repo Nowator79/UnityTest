@@ -84,6 +84,8 @@ namespace Scripts.Modules
             {
                 tcpSocketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 tcpSocketServer.Bind(new IPEndPoint(IPAddress.Any, port));
+                tcpSocketServer.Listen(0);
+
             }
             public static void TcpCloseServer()
             {
@@ -93,19 +95,17 @@ namespace Scripts.Modules
 
             public static async Task TcpListenMessage(Action<string, StringResult, string> responseHandler)
             {
-                tcpSocketServer.Listen(0);
 
-                while (true)
-                {
-                    Socket? tcpClient = await tcpSocketServer.AcceptAsync();
-                    _ = Task.Run(async () => await process(tcpClient, responseHandler));
-                }
+                Socket tcpClient = await tcpSocketServer.AcceptAsync();
+                UIDebug.Log("Новый запрос");
+                _ = Task.Run(async () => await process(tcpClient, responseHandler));
 
                
               
 
-                static async Task process(Socket? tcpClient, Action<string, StringResult, string> responseHandler)
+                static async Task process(Socket tcpClient, Action<string, StringResult, string> responseHandler)
                 {
+                    /*
                     string ipAddress = ((IPEndPoint)tcpClient.RemoteEndPoint).Address.ToString();
                     List<byte> response = new();
 
@@ -129,6 +129,35 @@ namespace Scripts.Modules
                     responseHandler(request, stringResult, ipAddress);
                     stringResult.str += "\n";
                     await tcpClient.SendAsync(Encoding.UTF8.GetBytes(stringResult.str), SocketFlags.None);
+                    */
+                    string ipAddress = ((IPEndPoint)tcpClient.RemoteEndPoint).Address.ToString();
+
+                    // буфер для накопления входящих данных
+                    var response = new List<byte>();
+                    // буфер для считывания одного байта
+                    var bytesRead = new byte[1];
+                    // считываем данные до конечного символа
+                    while (true)
+                    {
+                        var count = await tcpClient.ReceiveAsync(bytesRead, SocketFlags.None);
+                        // смотрим, если считанный байт представляет конечный символ, выходим
+                        if (count == 0 || bytesRead[0] == '\n') break;
+                        // иначе добавляем в буфер
+                        response.Add(bytesRead[0]);
+                    }
+
+                    string? request = Encoding.UTF8.GetString(response.ToArray());
+
+                    UIDebug.Log($"Запрос: {request}");
+
+                    response.Clear();
+                    string result = "";
+                    StringResult stringResult = new(result);
+
+                    responseHandler(request, stringResult, ipAddress);
+                    stringResult.str += "\n";
+                    UIDebug.Log($"Ответ: {stringResult.str}");
+                    await tcpClient.SendAsync(Encoding.UTF8.GetBytes(result), SocketFlags.None);
                 }
 
             }
