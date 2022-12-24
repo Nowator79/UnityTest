@@ -37,6 +37,7 @@ public static class CommendRouting
             Debug.Log(e);
             UIDebug.Log($"Не удалось распарсить {command}");
         }
+        UIDebug.Log(myObject.TypeCommandStr);
         switch (type)
         {
             case "tcp": tcpRout(myObject); break;
@@ -44,8 +45,6 @@ public static class CommendRouting
         }
         void tcpRout(CommandTemplate command)
         {
-            UIDebug.Log($"{myObject.TypeCommandStr}");
-
             if (myObject.TypeCommandStr != "")
             {
                 result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).SetProcess(command, ipAddress);

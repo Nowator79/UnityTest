@@ -28,22 +28,5 @@ public struct CommandTemplate
     {
         return JsonConvert.DeserializeObject<T>((JsonBody));
     }
-    private static string Coding(string json)
-    {
-        StringBuilder _json = new(json);
-        for (int i = 0; i < _json.Length; i++)
-        {
-            _json[i] = SwapBits(_json[i]);
-        }
-        return _json.ToString();
-    }
-
-
-    private static char SwapBits(char x)
-    {
-        return (char)((x & 0x0F) << 4 | (x & 0xF0) >> 4);
-    }
-
-
 }
 

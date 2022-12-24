@@ -212,6 +212,7 @@ namespace Scripts.Modules
                 {
                     response.Add((byte)bytesRead);
                 }
+
                 string result = Encoding.UTF8.GetString(response.ToArray());
                 response.Clear();
 

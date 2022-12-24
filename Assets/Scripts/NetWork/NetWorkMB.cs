@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Scripts.Modules.NetWork;
 
@@ -39,11 +38,19 @@ namespace Scripts
             if (SuccessfulConnect)
             {
                 UIDebug.Log($"Succesful connect to {IPAddres}:{Port}");
-                await SendRequst(new("GetOnline"), true);
-                await SendRequst(new("GetWorldObject"), true);
-                GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
-                UdpClientListenMessage = ListenUdp(Port);
-                GameStatus.StaticGameStatus.StartGameClient();
+                await SendRequst(new(nameof(GetOnline)), true);
+                await SendRequst(new(nameof(GetWorldObject)), true);
+                try
+                {
+                    GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
+                    UdpClientListenMessage = ListenUdp(Port);
+                    GameStatus.StaticGameStatus.StartGameClient();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"ID player: {GameStatus.StaticGameStatus.PlayerId}");
+                    Debug.Break();
+                }
             }
             else
             {
@@ -52,7 +59,7 @@ namespace Scripts
         }
         public async void Disconnect()
         {
-            await SendRequst(new("Disconected"));
+            await SendRequst(new(nameof(Disconected)));
             GameWorld.StaticGameWorld.Clear();
             NetWorkPlayers.StaticNetWorkPlayers.Clear();
             GameStatus.StaticGameStatus.EndGameClient();
@@ -153,28 +160,8 @@ namespace Scripts
             addressServer = new();
             addressServer.SetEndPoint(IPAddres, Port);
 
-            await SendRequst(new("TryConnect"), true);
-
-            int WaitSecunds = 5;
-            for (int i = 0; i < WaitSecunds; i++)
-            {
-                if (ClientStatus.IsWait)
-                {
-                    continue;
-                }
-                if (ClientStatus.IsConnect)
-                {
-                    return true;
-                }
-                if (ClientStatus.IsDisconnect)
-                {
-                    return false;
-                }
-
-                Task.Delay(1000).Wait();
-            }
-            ClientStatus.ConnectUnSuccessful();
-            return false;
+            await SendRequst(new(nameof(TryConnect)), true);
+            return true;
         }
         public void SendCommand(NetWorkSend remoteServer, CommandTemplate typeCommand)
         {
@@ -188,6 +175,8 @@ namespace Scripts
         }
         public async Task SendRequst(CommandTemplate Command, bool responce = false)
         {
+            try
+            {
 
             SetNameToCommend(ref Command);
 
@@ -197,6 +186,7 @@ namespace Scripts
                     Command.ToString(),
                     (result) =>
                     {
+                        UIDebug.Log(result);
                         NetWorkResult netWorkResult = new(result);
                         netWorkResult.SetTcp();
                         QureyReader.StaticQureyReader.SetProcessing(netWorkResult);
@@ -208,6 +198,10 @@ namespace Scripts
                 await addressServer.TcpRequst(
                   Command.ToString()
               );
+            } 
+            }
+            catch(Exception e)
+            {
             }
         }
         private void SyncPositionInvoke()

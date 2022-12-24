@@ -10,9 +10,7 @@ public class TryConnect : BaseCommand
         try
         {
             string name = command.UserName;
-            UIDebug.Log($"1");
             Unit player = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
-            UIDebug.Log($"Player connected {name}");
 
             Scripts.Modules.NetWork.NetWorkSend client = new();
             client.SetEndPoint(ipAddress, NetWorkMB.PortServer);
@@ -23,7 +21,7 @@ public class TryConnect : BaseCommand
 
             CommandTemplate commandTemplate = new()
             {
-                TypeCommandStr = "SuccessfulConnect",
+                TypeCommandStr = "",
             };
             commandTemplate.SetJsonBody(new ServerInfo(player.ID, "serverName"));
 

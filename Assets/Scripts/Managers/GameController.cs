@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
         static void Send(string btn, bool isDown)
         {
             ButtonNetWork btnNetWork = new(btn, isDown);
-            CommandTemplate command = new("ButtonDownUp");
+            CommandTemplate command = new(nameof(ButtonDownUp));
             command.SetJsonBody(btnNetWork);
             Task send = NetWorkMB.StaticNetWorkMB.SendRequst(command);
         }
