@@ -17,21 +17,21 @@ public class TryConnect : BaseCommand
             client.UdpConnect();
 
             NetWorkPlayers.StaticNetWorkPlayers.Add(name, client);
-
-
-            CommandTemplate commandTemplate = new()
-            {
-                TypeCommandStr = "",
-            };
-            commandTemplate.SetJsonBody(new ServerInfo(player.ID, "serverName"));
-
-            string result = commandTemplate.ToString();
-            UIDebug.Log($"ROUT {result}");
-
         }
         catch (Exception e)
         {
             Debug.LogError(e);
         }
+    }
+    public override string PreProcess(CommandTemplate command, string ipAddress)
+    {
+        base.PreProcess(command, ipAddress);
+
+        CommandTemplate commandTemplate = new(nameof(SuccessfulConnect));
+
+        commandTemplate.SetJsonBody(new ServerInfo(1, "serverName"));
+
+        string result = commandTemplate.ToString();
+        return result;
     }
 }
