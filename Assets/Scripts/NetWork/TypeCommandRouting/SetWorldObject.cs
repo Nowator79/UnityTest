@@ -6,7 +6,7 @@ public class SetWorldObject : BaseCommand
     {
        
     }
-    public override string SetProcess(CommandTemplate command, string ipAddress)
+    public override string PreProcess(CommandTemplate command, string ipAddress)
     {
         World world = command.GetJsonBody<World>();
         foreach (var element in world.objects)
@@ -15,6 +15,6 @@ public class SetWorldObject : BaseCommand
             unit.ID = element.Id;
             unit.transform.SetPositionAndRotation(element.Position.GetVector3(), element.Rotation.GetQuaternion());
         }
-        return base.SetProcess(command, ipAddress);
+        return base.PreProcess(command, ipAddress);
     }
 }
