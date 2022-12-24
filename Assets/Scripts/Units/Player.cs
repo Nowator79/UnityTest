@@ -30,7 +30,7 @@ public class Player : Unit
         {
             if (IsControl)
             {
-                Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Input.GetKeyDown(KeyCode.Space));
+                Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Input.GetKey(KeyCode.Space));
             }
             else
             {
