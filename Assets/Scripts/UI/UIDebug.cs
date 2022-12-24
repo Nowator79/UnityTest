@@ -1,13 +1,9 @@
-using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class UIDebug : MonoBehaviour
 {
-    [SerializeField]
     public TextMeshProUGUI LogText;
     public static UIDebug _UIDebug;
     private readonly Queue<string> logs = new();
@@ -27,10 +23,8 @@ public class UIDebug : MonoBehaviour
             string result = logs.Dequeue();
             _UIDebug.LogText.text += result + "\n";
         }
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.F5))
         {
-            UIDebug.Log(JsonConvert.SerializeObject(GameWorld.StaticGameWorld.GetWorld()));
-            UIDebug.Log(JsonConvert.SerializeObject(GameWorld.StaticGameWorld.GetWorld()).Length.ToString());
         }
     }
 

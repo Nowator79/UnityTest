@@ -30,12 +30,8 @@ public static class CommendRouting
         }
         catch (Exception e)
         {
-            result = new CommandTemplate()
-            {
-                TypeCommandStr = "ErrorRequst",
-            }.ToString();
+            result = new CommandTemplate(nameof(ErrorRequst)).ToString();
             Debug.Log(e);
-            UIDebug.Log($"�� ������� ���������� {command}");
         }
         try
         {
@@ -49,8 +45,6 @@ public static class CommendRouting
         }
         void tcpRout(CommandTemplate command)
         {
-            UIDebug.Log($"������: {myObject.TypeCommandStr}");
-
             if (myObject.TypeCommandStr != "")
             {
                 result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).PreProcess(command, ipAddress);

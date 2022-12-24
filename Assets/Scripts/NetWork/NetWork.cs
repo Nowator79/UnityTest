@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Scripts.Modules
 {
@@ -130,7 +128,6 @@ namespace Scripts.Modules
 
                     responseHandler(request, stringResult, ipAddress);
                     stringResult.str += "\n";
-                    UIDebug.Log($"Ответ: {stringResult.str}");
                     await tcpClient.SendAsync(Encoding.UTF8.GetBytes(stringResult.str), SocketFlags.None);
                 }
 
@@ -150,13 +147,13 @@ namespace Scripts.Modules
             private EndPoint remotePoint;
             private Socket udpSocket;
             private TcpClient tcpClient;
-            public string ip { get; private set; }
+            public string IP { get; private set; }
             public int port;
 
             public void SetEndPoint(string ipAddressRemote, int port)
             {
                 remotePoint = new IPEndPoint(IPAddress.Parse(ipAddressRemote), port);
-                ip = ipAddressRemote;
+                IP = ipAddressRemote;
                 this.port = port;
             }
             public void UdpConnect()
@@ -166,22 +163,22 @@ namespace Scripts.Modules
             public async void UdpSend(string message)
             {
                 byte[] data = Encoding.UTF8.GetBytes(message);
-                int bytes = await udpSocket.SendToAsync(data, SocketFlags.None, remotePoint);
+                _ = await udpSocket.SendToAsync(data, SocketFlags.None, remotePoint);
             }
             public void TcpConnect()
             {
                 tcpClient = new TcpClient();
-                tcpClient.ConnectAsync(ip, port).Wait();
+                tcpClient.ConnectAsync(IP, port).Wait();
             }
             public async Task<string> TcpSend(string message)
             {
                 NetworkStream stream = tcpClient.GetStream();
 
                 List<byte> response = new();
-                int bytesRead = 10;
                 byte[] data = Encoding.UTF8.GetBytes(message + '\n');
                 await stream.WriteAsync(data);
 
+                int bytesRead;
                 while ((bytesRead = stream.ReadByte()) != '\n')
                 {
                     response.Add((byte)bytesRead);

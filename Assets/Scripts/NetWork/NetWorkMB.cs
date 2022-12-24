@@ -94,7 +94,6 @@ namespace Scripts
             IsClient = false;
             Listen(PortServer);
             GameStatus.StaticGameStatus.StartGameServer();
-            UIDebug.Log("Start server");
             InvokeRepeating(nameof(SyncPositionInvoke), 0, 0.02f);
         }
         private void Listen(int port)
@@ -121,8 +120,6 @@ namespace Scripts
             {
                 Debug.LogException(e);
             }
-            UIDebug.Log("Прослушивание udp закончено");
-
         }
         private async Task ListenTcp(int port)
         {
@@ -134,19 +131,18 @@ namespace Scripts
                 while (true)
                 {
 
+                    string resultWhile = "";
                     await NetWorkGet.TcpListenMessage(
                         (string responce, NetWorkGet.StringResult result, string ipAddress) =>
                         {
+                            resultWhile = result.str;
                             result.str = CommendRouting.CommandRout(responce, "tcp", ipAddress);
                         }
                     );
-                    /*
-                    if(result == CloseCommand)
+                    if(resultWhile == CloseCommand)
                     {
-                        UIDebug.Log("Close server");
                         break;
                     }
-                    */
                 }
             }
             catch(Exception e)
@@ -186,7 +182,6 @@ namespace Scripts
                     Command.ToString(),
                     (result) =>
                     {
-                        UIDebug.Log(result);
                         NetWorkResult netWorkResult = new(result);
                         netWorkResult.SetTcp();
                         QureyReader.StaticQureyReader.SetProcessing(netWorkResult);

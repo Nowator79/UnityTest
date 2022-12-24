@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using UnityEngine;
 
 public class BaseCommand
 {
@@ -8,7 +9,7 @@ public class BaseCommand
 
     public virtual void Process(CommandTemplate command, string ipAddress)
     {
-        UIDebug.Log("Обработчик не реализован");
+        Debug.LogError("Обработчик не реализован");
     }
     public static bool Inclde(BaseCommand command)
     {
@@ -30,7 +31,7 @@ public class BaseCommand
         BaseCommand tmp;
         if (!Commands.TryGetValue(name, out tmp))
         {
-            UIDebug.Log($"Не удалось обработать комманду type: {name}");
+            Debug.LogError($"Не удалось обработать комманду type: {name}");
         }
         return tmp;
     }
