@@ -49,7 +49,7 @@ public class BaseCommand
             Process(instruction.Command, instruction.IP);
         }
     }
-    public virtual string SetProcess(CommandTemplate command, string ipAddress)
+    public virtual string PreProcess(CommandTemplate command, string ipAddress)
     {
         Tasks.Enqueue(new Instruction(command, ipAddress));
         return "";

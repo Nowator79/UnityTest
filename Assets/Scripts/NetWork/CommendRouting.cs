@@ -37,25 +37,30 @@ public static class CommendRouting
             Debug.Log(e);
             UIDebug.Log($"Не удалось распарсить {command}");
         }
-        switch (type)
+        try
         {
-            case "tcp": tcpRout(myObject); break;
-            case "udp": udpRout(myObject); break;
+            switch (type)
+            {
+                case "tcp": tcpRout(myObject); break;
+                case "udp": udpRout(myObject); break;
+            }
+        }catch(Exception e)
+        {
         }
         void tcpRout(CommandTemplate command)
         {
-            UIDebug.Log($"{myObject.TypeCommandStr}");
+            UIDebug.Log($"Запрос: {myObject.TypeCommandStr}");
 
             if (myObject.TypeCommandStr != "")
             {
-                result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).SetProcess(command, ipAddress);
+                result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).PreProcess(command, ipAddress);
             }
         }
         void udpRout(CommandTemplate command)
         {
             if (command.TypeCommandStr != "")
             {
-                result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).SetProcess(command, ipAddress);
+                result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).PreProcess(command, ipAddress);
             }
         }
 

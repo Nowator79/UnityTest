@@ -5,12 +5,24 @@ using UnityEngine;
 
 public class GameWorld : MonoBehaviour
 {
-    public static GameWorld StaticGameWorld; 
+    public static GameWorld StaticGameWorld;
+    public World CashWorld;
+    public List<Unit> UnitsList { get; set; } = new();
     private GameWorld()
     {
         StaticGameWorld = this;
     }
-    public List<Unit> UnitsList { get; set; } = new();
+    private void Update()
+    {
+        List<NetWork.TypeJsonBody.GameObject> objects = new();
+
+        foreach (Unit unity in UnitsList)
+        {
+            objects.Add(new NetWork.TypeJsonBody.GameObject(unity.ID, unity.IdType, new(unity.transform.position), new(unity.transform.rotation.eulerAngles)));
+        }
+        World world = new(objects);
+        CashWorld = world;
+    }
     public void InintGameWorld()
     {
         Player player = (Player)DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
@@ -33,14 +45,7 @@ public class GameWorld : MonoBehaviour
     }
     public World GetWorld() 
     {
-        List<NetWork.TypeJsonBody.GameObject> objects = new();
-
-        foreach (Unit unity in UnitsList)
-        {
-            objects.Add(new NetWork.TypeJsonBody.GameObject(unity.ID, unity.IdType, new(unity.transform.position), new(unity.transform.rotation.eulerAngles)));
-        }
-        World world = new(objects);
-        return world;
+        return CashWorld;
     }
     public void RemoveById(int id)
     {

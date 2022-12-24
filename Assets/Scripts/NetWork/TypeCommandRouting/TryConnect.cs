@@ -10,7 +10,6 @@ public class TryConnect : BaseCommand
         try
         {
             string name = command.UserName;
-            UIDebug.Log($"1");
             Unit player = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[(int)DataBase.Units.UnitsList.Player].CreateObject();
             UIDebug.Log($"Player connected {name}");
 
@@ -19,21 +18,21 @@ public class TryConnect : BaseCommand
             client.UdpConnect();
 
             NetWorkPlayers.StaticNetWorkPlayers.Add(name, client);
-
-
-            CommandTemplate commandTemplate = new()
-            {
-                TypeCommandStr = "SuccessfulConnect",
-            };
-            commandTemplate.SetJsonBody(new ServerInfo(player.ID, "serverName"));
-
-            string result = commandTemplate.ToString();
-            UIDebug.Log($"ROUT {result}");
-
         }
         catch (Exception e)
         {
             Debug.LogError(e);
         }
+    }
+    public override string PreProcess(CommandTemplate command, string ipAddress)
+    {
+        base.PreProcess(command, ipAddress);
+
+        CommandTemplate commandTemplate = new(nameof(SuccessfulConnect));
+
+        commandTemplate.SetJsonBody(new ServerInfo(1, "serverName"));
+
+        string result = commandTemplate.ToString();
+        return result;
     }
 }
