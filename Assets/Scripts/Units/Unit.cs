@@ -7,6 +7,15 @@ public class Unit : MonoBehaviour
     public int ID = 0;
     public static int IDIter = 0;
     public long LastUpdate;
+    private Vector3 NetWorkPosition;
+    private Quaternion NetWorkRotation;
+    [SerializeField]
+    private float timeLerp = 0.5f;
+    protected virtual void Update()
+    {
+        transform.position = Vector3.Lerp(transform.position, NetWorkPosition, timeLerp);
+        transform.rotation = Quaternion.Lerp(transform.rotation, NetWorkRotation, timeLerp);
+    }
     public void Print()
     {
         Debug.Log($"{gameObject.name}");
@@ -23,5 +32,10 @@ public class Unit : MonoBehaviour
     public void SetCamera()
     {
         CameraMove.StaticCameraMove.SetTarget(transform);
+    }
+    public void SetNetWork(Vector3 position, Quaternion rotation)
+    {
+        NetWorkPosition = position;
+        NetWorkRotation = rotation;
     }
 }
