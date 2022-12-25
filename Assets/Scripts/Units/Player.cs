@@ -24,8 +24,9 @@ public class Player : Unit
     private float Vertical = 0;
     [SerializeField]
     private bool W, A, S, D, Space;
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         if (GameStatus.StaticGameStatus.IsServer)
         {
             if (IsControl)

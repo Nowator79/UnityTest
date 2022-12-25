@@ -25,6 +25,7 @@ public class UIDebug : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.F5))
         {
+            _ = Scripts.NetWorkMB.StaticNetWorkMB.SendRequst(new(nameof(GetWorldObject)), true);
         }
     }
 

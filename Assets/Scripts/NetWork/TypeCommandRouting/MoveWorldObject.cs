@@ -9,7 +9,7 @@ public class MoveWorldObject : BaseCommand
         if (element.UpdateTime > unit.LastUpdate)
         {
             unit.LastUpdate = element.UpdateTime;
-            unit.transform.SetPositionAndRotation(element.Position.GetVector3(), element.Rotation.GetQuaternion());
+            unit.SetNetWork(element.Position.GetVector3(), element.Rotation.GetQuaternion());
         }
     }
 
