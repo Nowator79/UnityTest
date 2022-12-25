@@ -11,9 +11,16 @@ public class SetWorldObject : BaseCommand
         World world = command.GetJsonBody<World>();
         foreach (var element in world.objects)
         {
-            Unit unit = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[element.IdType].CreateObject();
-            unit.ID = element.Id;
-            unit.transform.SetPositionAndRotation(element.Position.GetVector3(), element.Rotation.GetQuaternion());
+            if (GameWorld.StaticGameWorld.FindUnitById(element.Id))
+            {
+
+            }
+            else
+            {
+                Unit unit = DataBase.DataBase.StaticDateBase.UnitsDataBase.Units[element.IdType].CreateObject();
+                unit.ID = element.Id;
+                unit.transform.SetPositionAndRotation(element.Position.GetVector3(), element.Rotation.GetQuaternion());
+            }
         }
         return base.PreProcess(command, ipAddress);
     }
