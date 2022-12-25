@@ -46,7 +46,7 @@ namespace Scripts
                     UdpClientListenMessage = ListenUdp(Port);
                     GameStatus.StaticGameStatus.StartGameClient();
                 }
-                catch (Exception e)
+                catch
                 {
                     Debug.LogError($"ID player: {GameStatus.StaticGameStatus.PlayerId}");
                     Debug.Break();

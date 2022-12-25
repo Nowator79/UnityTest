@@ -119,7 +119,7 @@ namespace Scripts.Modules
                         response.Add(bytesRead[0]);
                     }
 
-                    string? request = Encoding.UTF8.GetString(response.ToArray());
+                    string request = Encoding.UTF8.GetString(response.ToArray());
 
 
                     response.Clear();

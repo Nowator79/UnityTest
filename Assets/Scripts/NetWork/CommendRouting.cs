@@ -6,11 +6,8 @@ public static class CommendRouting
 {
     public static void IncludeCommands()
     {
-        BaseCommand.Inclde(new ConnectCommand());
-        BaseCommand.Inclde(new DisconnectCommand());
         BaseCommand.Inclde(new TryConnect());
         BaseCommand.Inclde(new SuccessfulConnect());
-        BaseCommand.Inclde(new Successful());
         BaseCommand.Inclde(new Disconected());
         BaseCommand.Inclde(new ErrorRequst());
         BaseCommand.Inclde(new GetOnline());
