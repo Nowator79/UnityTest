@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GameWorld : MonoBehaviour
 {
-    public static GameWorld StaticGameWorld;
-    public World CashWorld;
+    public static GameWorld StaticGameWorld { get; set; }
+    private World CashWorld { get; set; }
     public List<Unit> UnitsList { get; set; } = new();
     private GameWorld()
     {

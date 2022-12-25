@@ -7,7 +7,7 @@ public class GameStatus : MonoBehaviour
 
     private GameWorld GameWorld;
     public string PlayerName = "";
-    public int PlayerId;
+    public int PlayerId { get; set; }
     public bool IsServer { get; private set; } = false;
     public bool IsGameing { get; private set; } = false;
 

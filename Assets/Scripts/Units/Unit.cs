@@ -20,6 +20,10 @@ public class Unit : MonoBehaviour
 
         return unit;
     }
+    public static int NextPlayerId()
+    {
+        return IDIter;
+    }
     public void SetCamera()
     {
         CameraMove.StaticCameraMove.SetTarget(transform);

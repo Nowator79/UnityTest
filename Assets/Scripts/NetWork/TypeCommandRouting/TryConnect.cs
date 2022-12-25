@@ -29,7 +29,7 @@ public class TryConnect : BaseCommand
 
         CommandTemplate commandTemplate = new(nameof(SuccessfulConnect));
 
-        commandTemplate.SetJsonBody(new ServerInfo(1, "serverName"));
+        commandTemplate.SetJsonBody(new ServerInfo(Unit.NextPlayerId(), "serverName"));
 
         string result = commandTemplate.ToString();
         return result;

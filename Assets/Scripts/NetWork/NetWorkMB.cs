@@ -195,7 +195,7 @@ namespace Scripts
               );
             } 
             }
-            catch(Exception e)
+            catch
             {
             }
         }
@@ -212,7 +212,7 @@ namespace Scripts
                 {
                     try
                     {
-                        CommandTemplate command = new() { TypeCommandStr = "MoveWorldObject" };
+                        CommandTemplate command = new(nameof(MoveWorldObject));
                         command.SetJsonBody(element);
                         player.Value.NetWorkSender.UdpSend(command.ToString());
                     }
