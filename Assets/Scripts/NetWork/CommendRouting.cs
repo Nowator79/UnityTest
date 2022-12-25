@@ -16,6 +16,8 @@ public static class CommendRouting
         BaseCommand.Inclde(new SetWorldObject());
         BaseCommand.Inclde(new MoveWorldObject());
         BaseCommand.Inclde(new ButtonDownUp());
+        BaseCommand.Inclde(new PingClient());
+        BaseCommand.Inclde(new PingServer());
     }
     public static string CommandRout(string command, string type, string ipAddress)
     {

@@ -45,6 +45,7 @@ namespace Scripts
                     GameWorld.StaticGameWorld.FindUnitById(GameStatus.StaticGameStatus.PlayerId).SetCamera();
                     UdpClientListenMessage = ListenUdp(Port);
                     GameStatus.StaticGameStatus.StartGameClient();
+                    InvokeRepeating(nameof(SendPingInvoke), 0.5f, 0.5f);
                 }
                 catch
                 {
@@ -60,6 +61,8 @@ namespace Scripts
         public async void Disconnect()
         {
             await SendRequst(new(nameof(Disconected)));
+            CancelInvoke(nameof(SendPingInvoke));
+
             GameWorld.StaticGameWorld.Clear();
             NetWorkPlayers.StaticNetWorkPlayers.Clear();
             GameStatus.StaticGameStatus.EndGameClient();
@@ -159,11 +162,6 @@ namespace Scripts
             await SendRequst(new(nameof(TryConnect)), true);
             return true;
         }
-        public void SendCommand(NetWorkSend remoteServer, CommandTemplate typeCommand)
-        {
-            Debug.Log(typeCommand.ToString());
-            remoteServer.UdpSend(typeCommand.ToString());
-        }
         public void SetNameToCommend(ref CommandTemplate command)
         {
             command.UserName = GameStatus.StaticGameStatus.PlayerName;
@@ -221,6 +219,17 @@ namespace Scripts
                         Debug.LogException(e);
                     }
                 }
+            }
+        }
+        private async void SendPingInvoke()
+        {
+            await SendRequst(new(nameof(PingClient)));
+        }
+        private void ClearOflinePlayer()
+        {
+            foreach (KeyValuePair<string, NetWorkPlayer> player in NetWorkPlayers.StaticNetWorkPlayers.PlayersList)
+            {
+                player.Value.CheckOneline();
             }
         }
     }

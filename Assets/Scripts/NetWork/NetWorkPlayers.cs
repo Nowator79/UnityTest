@@ -20,6 +20,10 @@ public class NetWorkPlayers : MonoBehaviour
         PlayersList.Remove(Name);
         UpdateUI();
     }
+    public NetWorkPlayer FindByName(string Name)
+    {
+        return PlayersList[Name];
+    }
     public void UpdateUI()
     {
         UINetWorkStats.StaticUINetWorkStats.RemoveAll();
@@ -32,5 +36,14 @@ public class NetWorkPlayers : MonoBehaviour
     {
         UINetWorkStats.StaticUINetWorkStats.RemoveAll();
         PlayersList = new();
+    }
+    public void DisonectClient(string userName)
+    {
+        NetWorkPlayer user = PlayersList[userName];
+        //чистим из игроков
+        RemoveByName(user.Name);
+        //чистим игровой обьект
+        GameWorld.StaticGameWorld.RemoveById(user.Id);
+        UIDebug.Log($"Disconect: {user.Name}");
     }
 }
