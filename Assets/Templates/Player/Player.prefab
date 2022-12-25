@@ -132,6 +132,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IdType: 1
   ID: 0
+  LastUpdate: 0
+  timeLerp: 0
   gravity: -9
   jumpForse: 20
   speed: 20
+  IsControl: 0
+  Horizontal: 0
+  Vertical: 0
+  W: 0
+  A: 0
+  S: 0
+  D: 0
+  Space: 0

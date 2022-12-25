@@ -118,7 +118,7 @@ namespace Scripts
             }
             catch (System.Exception e)
             {
-                Debug.LogException(e);
+                UIDebug.Log(e.Message);
             }
         }
         private async Task ListenTcp(int port)

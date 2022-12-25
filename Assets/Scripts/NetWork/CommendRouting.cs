@@ -40,7 +40,7 @@ public static class CommendRouting
                 case "tcp": tcpRout(myObject); break;
                 case "udp": udpRout(myObject); break;
             }
-        }catch(Exception e)
+        }catch
         {
         }
         void tcpRout(CommandTemplate command)
@@ -52,6 +52,7 @@ public static class CommendRouting
         }
         void udpRout(CommandTemplate command)
         {
+            //UIDebug.ClearLog(command.ToString());
             if (command.TypeCommandStr != "")
             {
                 result = BaseCommand.FindCommandProcesser(myObject.TypeCommandStr).PreProcess(command, ipAddress);

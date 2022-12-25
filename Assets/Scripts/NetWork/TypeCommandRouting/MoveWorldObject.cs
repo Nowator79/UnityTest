@@ -6,10 +6,18 @@ public class MoveWorldObject : BaseCommand
     {
         GameObject element = command.GetJsonBody<GameObject>();
         Unit unit = GameWorld.StaticGameWorld.FindUnitById(element.Id);
-        if (element.UpdateTime > unit.LastUpdate)
+        if (unit != null)
         {
-            unit.LastUpdate = element.UpdateTime;
-            unit.SetNetWork(element.Position.GetVector3(), element.Rotation.GetQuaternion());
+
+            if (element.UpdateTime > unit.LastUpdate)
+            {
+                unit.LastUpdate = element.UpdateTime;
+                unit.SetNetWork(element.Position.GetVector3(), element.Rotation.GetQuaternion());
+            }
+        }
+        else
+        {
+            _ = Scripts.NetWorkMB.StaticNetWorkMB.SendRequst(new(nameof(GetWorldObject)), true);
         }
     }
 

@@ -12,6 +12,11 @@ public class UIDebug : MonoBehaviour
     {
         _UIDebug.logs.Enqueue(log);
     }
+    public static void ClearLog(string log)
+    {
+        _UIDebug.LogText.text = "";
+        _UIDebug.logs.Enqueue(log);
+    }
     private void Start()
     {
         _UIDebug = this;

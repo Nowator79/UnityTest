@@ -9,7 +9,7 @@ public class Unit : MonoBehaviour
     public long LastUpdate;
     private Vector3 NetWorkPosition;
     private Quaternion NetWorkRotation;
-    private float timeLerp = 0.08f;
+    private float timeLerp = 0.3f;
     protected virtual void Update()
     {
         transform.position = Vector3.Lerp(transform.position, NetWorkPosition, timeLerp);
