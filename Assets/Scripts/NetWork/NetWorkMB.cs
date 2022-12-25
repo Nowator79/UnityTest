@@ -94,7 +94,7 @@ namespace Scripts
             IsClient = false;
             Listen(PortServer);
             GameStatus.StaticGameStatus.StartGameServer();
-            InvokeRepeating(nameof(SyncPositionInvoke), 0, 0.02f);
+            InvokeRepeating(nameof(SyncPositionInvoke), 0, 0.04f);
         }
         private void Listen(int port)
         {
